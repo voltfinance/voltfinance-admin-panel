@@ -24,17 +24,11 @@ const FarmDetails = ({ id, incentiveKey }: IFarmDetails) => {
 
     const depositsOnFarm = deposits ? deposits.deposits.length : undefined
 
-    const apr = 0
-
-    const tvl = 0
-
     const { config } = usePrepareContractWrite({
         address: ALGEBRA_ETERNAL_FARMING,
         abi: eternalFarmingABI,
         functionName: 'deactivateIncentive',
-        args: [
-            incentiveKey
-        ]
+        args: [ incentiveKey ]
     })
 
     const { data, write } = useContractWrite(config)
@@ -52,18 +46,10 @@ const FarmDetails = ({ id, incentiveKey }: IFarmDetails) => {
                 <div className="font-semibold text-sm">Deposits</div>
                 { depositsOnFarm !== undefined ? <div>{depositsOnFarm}</div> : <div></div> }
             </div>
-            <div>
-                <div className="font-semibold text-sm">TVL</div>
-                { tvl !== undefined ? <div>{tvl}</div> : <div></div> }
-            </div>
-            <div>
-                <div className="font-semibold text-sm">APR</div>
-                { apr !== undefined ? <div>{apr}</div> : <div></div> }
-            </div>
         </div>
         <div className="w-full mt-auto">
-            <button disabled={isLoading || !write} onClick={() => write && write()} className="w-full py-2 px-4 border border-red-200 text-red-500 font-bold rounded-xl hover:bg-red-500 hover:text-white">
-                { isLoading ? <Loader/> : 'Deactivate' }
+            <button disabled={isLoading || !write} onClick={() => write && write()} className="flex justify-center w-full py-2 px-4 border border-red-200 text-red-500 font-bold rounded-xl hover:bg-red-500 hover:text-white">
+                { isLoading ? <Loader color="currentColor"/> : 'Deactivate' }
             </button>
         </div>
     </div>

@@ -59,10 +59,6 @@ const FarmPoolDetails = ({ name, id, token0, token1 }: IFarmPoolDetails) => {
                 <div className="font-semibold text-sm">{`${token1.symbol} to ${token0.symbol} rate`}</div>
                 { formattedPool ? <div>{`1 ${token1.symbol} = ${formattedPool.token1To0Rate} ${token0.symbol}`}</div> : <div></div> }
             </div>
-            <div>
-                <div className="font-semibold text-sm">TVL</div>
-                { formattedPool ? <div>{formattedPool.tvlUSD}</div> : <div></div> }
-            </div>
         </div>
     </div>
 

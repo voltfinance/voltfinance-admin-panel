@@ -58,7 +58,7 @@ const InputNumber = ({ title, name, control, disabled, isRequired, maxDecimals =
                 onChange={e => {
                     if (disabled) return
                     let value = e.target.value.replace(/,/g, ".")
-                    value = value.indexOf(".") >= 0 ? value.slice(0, value.indexOf(".") + maxDecimals) : value
+                    value = value.indexOf(".") >= 0 ? value.slice(0, value.indexOf(".") + maxDecimals + 1) : value
                     if (value === "" || inputRegex.test(value.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))) {
                         onChange(value === '.' ? '0.' : value)
                     }

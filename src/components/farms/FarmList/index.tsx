@@ -55,7 +55,8 @@ const FarmList = () => {
     const [showDeactivated, setShowDeactivated] = useState(false)
 
     const { data: farms, loading } = useAllFarmsQuery({
-        client: farmsClient
+        client: farmsClient,
+        pollInterval: 50000
     })
 
     const { activeFarms, deactivatedFarms } = useMemo(() => {
@@ -93,11 +94,15 @@ const FarmList = () => {
         { loading ? 'Loading' : <div>
             <div className="text-lg font-semibold mb-4">Active Farms</div>
             <FarmHeader />
-            { activeFarms.map(farm => <FarmRow {...farm} />) }
+            <div className="grid grid-cols-1 gap-4">
+                { activeFarms.map(farm => <FarmRow {...farm} />) }
+            </div>
             {
                 showDeactivated ? <>
                     <div className="text-lg font-semibold my-4">Deactivated Farms</div>
-                    { deactivatedFarms.map(farm => <FarmRow {...farm} />) }
+                    <div className="grid grid-cols-1 gap-4">
+                        { deactivatedFarms.map(farm => <FarmRow {...farm} />) }
+                    </div>
                 </>
                 : null
             }

@@ -5,6 +5,8 @@ import { useAlgebraPoolPlugin } from "@/generated"
 import { useTransitionAwait } from "@/hooks/common/useTransactionAwait"
 import { PartialIncentiveKey } from "@/types/incentive-key"
 import { IRewards } from "@/types/rewards"
+import { useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 import { useContractWrite, usePrepareContractWrite } from "wagmi"
 
 interface ICreateFarmButton {
@@ -18,6 +20,8 @@ const CreateFarmButton = ({
     incentiveKey: { rewardToken, bonusRewardToken, pool, nonce },
     rewards: { reward, rewardRate, bonusReward, bonusRewardRate }
 }: ICreateFarmButton) => {
+
+    const navigate = useNavigate()
 
     const { data: plugin } = useAlgebraPoolPlugin({
         address: pool
@@ -51,12 +55,18 @@ const CreateFarmButton = ({
 
     const { data, write: onCreate } = useContractWrite(config)
 
-    const { isLoading } = useTransitionAwait(data?.hash, `Create Farm`)
+    const { isLoading, isSuccess } = useTransitionAwait(data?.hash, `Create Farm`)
+
+    useEffect(() => {
+        if (isSuccess) {
+            navigate('/farms')
+        }
+    }, [isSuccess, navigate])
 
     const isDisabled = !isKeyReady || !areRewardsReady || !onCreate || isLoading
 
-    return <button disabled={isDisabled} onClick={() => onCreate && onCreate()} type={'submit'} className="py-4 bg-blue-500 text-white font-bold rounded-xl hover:bg-blue-600 disabled:bg-blue-300 disabled:cursor-not-allowed">{
-        isLoading ? <Loader /> : 'Create Farm'
+    return <button disabled={isDisabled} onClick={() => onCreate && onCreate()} type={'submit'} className="flex justify-center py-4 bg-blue-500 text-white font-bold rounded-xl hover:bg-blue-600 disabled:bg-blue-300 disabled:cursor-not-allowed">{
+        isLoading ? <Loader color="currentColor" /> : 'Create Farm'
     }</button>
 }
 

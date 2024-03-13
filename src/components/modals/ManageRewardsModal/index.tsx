@@ -23,8 +23,8 @@ const ManageRewardsModal = ({ title, functionName, incentiveKey, rewardRates, is
 
     const [value, setValue] = useState<string>('')
 
-    const args = functionName === 'setRates' ? isBonus ? [rewardRates[0].value, parseUnits(`${Number(value)}`, rewardRates[1].decimals)] : [ parseUnits(`${Number(value)}`, rewardRates[0].decimals), rewardRates[1].value] 
-    : isBonus ? [ 0n, parseUnits(`${Number(value)}`, rewardRates[1].decimals) ] : [ parseUnits(`${Number(value)}`, rewardRates[0].decimals), 0n ]
+    const args = functionName === 'setRates' ? isBonus ? [rewardRates[0].value, parseUnits(value, rewardRates[1].decimals)] : [ parseUnits(value, rewardRates[0].decimals), rewardRates[1].value] 
+    : isBonus ? [ 0n, parseUnits(value, rewardRates[1].decimals) ] : [ parseUnits(value, rewardRates[0].decimals), 0n ]
 
     const { config } = usePrepareContractWrite({
         address: ALGEBRA_ETERNAL_FARMING,
@@ -62,15 +62,22 @@ const ManageRewardsModal = ({ title, functionName, incentiveKey, rewardRates, is
                 maxLength={100}
                 value={value}
                 placeholder="Enter amount"
-                onChange={(e) => {
-                    const value = e.target.value.replace(/,/g, ".")
+                // onChange={(e) => {
+                //     const value = e.target.value.replace(/,/g, ".")
+                //     if (value === "" || RegExp(`^\\d*(?:\\\\[.])?\\d*$`).test(value.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))) {
+                //         setValue(value === '.' ? '0.' : value)
+                //     } 
+                // }}
+                onChange={e => {
+                    let value = e.target.value.replace(/,/g, ".")
+                    value = value.indexOf(".") >= 0 ? value.slice(0, value.indexOf(".") + (isBonus ? rewardRates[1].decimals : rewardRates[0].decimals) + 1) : value
                     if (value === "" || RegExp(`^\\d*(?:\\\\[.])?\\d*$`).test(value.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))) {
                         setValue(value === '.' ? '0.' : value)
-                    } 
+                    }
                 }}
             />
-            <button disabled={!value || isLoading} onClick={() => write && write()} className="w-full p-2 bg-blue-500 text-white font-bold rounded-xl hover:bg-blue-400 disabled:bg-blue-400">
-                { isLoading ? <Loader/> : 'Confirm' }
+            <button disabled={!value || isLoading} onClick={() => write && write()} className="flex justify-center w-full p-2 bg-blue-500 text-white font-bold rounded-xl hover:bg-blue-400 disabled:bg-blue-400">
+                { isLoading ? <Loader color="currentColor" /> : 'Confirm' }
             </button>
         </CredenzaBody>
     </CredenzaContent>

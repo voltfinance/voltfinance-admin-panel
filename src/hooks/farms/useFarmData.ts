@@ -1,5 +1,6 @@
 import { useAlgebraPoolToken0, useAlgebraPoolToken1 } from "@/generated";
 import { FarmingFieldsFragment } from "@/graphql/generated/graphql";
+import { ADDRESS_ZERO } from "@cryptoalgebra/integral-sdk";
 import { formatUnits } from "viem";
 import { useToken } from "wagmi";
 
@@ -24,11 +25,11 @@ export function useFarmData (farm: FarmingFieldsFragment | null | undefined) {
     })
 
     const { data: _rewardToken } = useToken({
-        address: rewardToken
+        address: rewardToken === ADDRESS_ZERO ? undefined : rewardToken
     })
 
     const { data: _bonusRewardToken } = useToken({
-        address: bonusRewardToken
+        address: bonusRewardToken === ADDRESS_ZERO ? undefined: bonusRewardToken
     })
 
     const formattedReward = _rewardToken ? Number(formatUnits(BigInt(reward), _rewardToken.decimals)).toFixed(3) : undefined
@@ -37,7 +38,7 @@ export function useFarmData (farm: FarmingFieldsFragment | null | undefined) {
     const formattedRewardRate = _rewardToken ? Number(formatUnits(BigInt(rewardRate), _rewardToken.decimals)) : undefined
     const formattedBonusRewardRate = _bonusRewardToken ? Number(formatUnits(BigInt(bonusRewardRate), _bonusRewardToken.decimals)) : undefined
 
-    const rewardRates: [ { value: bigint, decimals: number }, { value: bigint, decimals: number } ] = [{value: BigInt(rewardRate), decimals: _rewardToken?.decimals || 0 }, { value: BigInt(bonusRewardRate), decimals: _bonusRewardToken?.decimals || 0 }]
+    const rewardRates: [ { value: bigint, decimals: number }, { value: bigint, decimals: number } ] = [{value: BigInt(rewardRate || 0), decimals: _rewardToken?.decimals || 0 }, { value: BigInt(bonusRewardRate || 0), decimals: _bonusRewardToken?.decimals || 0 }]
 
     return {
         token0,
