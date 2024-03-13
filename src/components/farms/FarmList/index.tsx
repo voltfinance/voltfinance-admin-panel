@@ -44,9 +44,9 @@ const FarmRow = (farm: FarmingFieldsFragment) => {
             <div className="md:hidden font-bold">Bonus Rewards</div>
             <div>{`${bonusReward} ${bonusRewardToken.symbol}`}</div>
         </div> : <div></div> }
-        { !farm.isDeactivated && <div className="text-right">
+        <div className="text-right">
             <Link to={`/farms/${farm.id}`} state={farm} className="px-4 py-2 bg-blue-500 text-white font-bold rounded-xl hover:bg-blue-400">Manage →</Link>
-        </div>}
+        </div>
     </div>
 }
 

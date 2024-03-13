@@ -10,12 +10,13 @@ import { useContractWrite, usePrepareContractWrite } from "wagmi";
 interface IFarmDetails {
     id: string;
     incentiveKey: IncentiveKey;
+    isDeactivated: boolean;
 }
 
-const FarmDetails = ({ id, incentiveKey }: IFarmDetails) => {
+const FarmDetails = ({ id, incentiveKey, isDeactivated }: IFarmDetails) => {
 
     const { data: deposits } = useAllDepositsOnFarmingQuery({
-        skip: !id,
+        skip: !id || isDeactivated,
         client: farmsClient,
         variables: {
             farmId: id || ''
@@ -48,9 +49,9 @@ const FarmDetails = ({ id, incentiveKey }: IFarmDetails) => {
             </div>
         </div>
         <div className="w-full mt-auto">
-            <button disabled={isLoading || !write} onClick={() => write && write()} className="flex justify-center w-full py-2 px-4 border border-red-200 text-red-500 font-bold rounded-xl hover:bg-red-500 hover:text-white">
+            { !isDeactivated && <button disabled={isLoading || !write} onClick={() => write && write()} className="flex justify-center w-full py-2 px-4 border border-red-200 text-red-500 font-bold rounded-xl hover:bg-red-500 hover:text-white">
                 { isLoading ? <Loader color="currentColor"/> : 'Deactivate' }
-            </button>
+            </button> }
         </div>
     </div>
 

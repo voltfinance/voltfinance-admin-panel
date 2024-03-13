@@ -6,7 +6,7 @@ import { useToken } from "wagmi";
 
 export function useFarmData (farm: FarmingFieldsFragment | null | undefined) {
 
-    const { pool, rewardToken, bonusRewardToken, reward, rewardRate, bonusReward, bonusRewardRate, nonce } = farm || {}
+    const { pool, rewardToken, bonusRewardToken, reward, rewardRate, bonusReward, bonusRewardRate, nonce, isDeactivated } = farm || {}
 
     const { data: _token0 } = useAlgebraPoolToken0({
         address: pool
@@ -51,7 +51,8 @@ export function useFarmData (farm: FarmingFieldsFragment | null | undefined) {
         rewardRate: formattedRewardRate,
         bonusRewardRate: formattedBonusRewardRate,
         nonce,
-        rewardRates
+        rewardRates,
+        isDeactivated: Boolean(isDeactivated)
     }
 
 }

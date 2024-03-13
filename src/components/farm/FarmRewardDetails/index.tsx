@@ -10,6 +10,7 @@ interface IFarmRewardDetails {
     reward: string;
     incentiveKey: PartialIncentiveKey;
     rewardRates: [{ value: bigint, decimals: number }, { value: bigint, decimals: number }];
+    isDeactivated: boolean;
     isBonus?: boolean;
 }
 
@@ -25,7 +26,7 @@ const RewardLeftForSpan = {
     DAYS: 'DAYS'
 }
 
-const FarmRewardDetails = ({ token, rate, reward, incentiveKey, isBonus, rewardRates }: IFarmRewardDetails) => {
+const FarmRewardDetails = ({ token, rate, reward, incentiveKey, isBonus, rewardRates, isDeactivated }: IFarmRewardDetails) => {
 
     const [rewardRateSpan, setRewardRateSpan] = useState(RewardRateSpan.SECOND)
     const [rewardLeftForSpan, setRewardLeftForSpan] = useState(RewardLeftForSpan.MINUTES)
@@ -67,17 +68,18 @@ const FarmRewardDetails = ({ token, rate, reward, incentiveKey, isBonus, rewardR
             <div className="text-gray-600">{isBonus ? 'Reward 2' : 'Reward 1'}</div>
         </div>
         <div className="text-xl font-bold mb-4">{`${reward} ${token.symbol}`}</div>
-        <div className="mb-4">
-            <div className="font-semibold text-sm mb-2">Distribution Rate</div>
-            <div className="flex items-center justify-between">
-                <div>{rewardRate}</div>
-                <div className="flex items-center gap-2">
-                    <button onClick={() => setRewardRateSpan(RewardRateSpan.SECOND)} className={cn('py-1 px-2 rounded-md', rewardRateSpan === RewardRateSpan.SECOND ? 'bg-blue-500 text-white font-bold border' : 'border')}>Sec</button>
-                    <button onClick={() => setRewardRateSpan(RewardRateSpan.DAY)} className={cn('py-1 px-2 rounded-md', rewardRateSpan === RewardRateSpan.DAY ? 'bg-blue-500 text-white font-bold border' : 'border')}>Day</button>
-                    <button onClick={() => setRewardRateSpan(RewardRateSpan.MONTH)} className={cn('py-1 px-2 rounded-md', rewardRateSpan === RewardRateSpan.MONTH ? 'bg-blue-500 text-white font-bold border' : 'border')}>Month</button>
+        { !isDeactivated && <> 
+            <div className="mb-4">
+                <div className="font-semibold text-sm mb-2">Distribution Rate</div>
+                <div className="flex items-center justify-between">
+                    <div>{rewardRate}</div>
+                    <div className="flex items-center gap-2">
+                        <button onClick={() => setRewardRateSpan(RewardRateSpan.SECOND)} className={cn('py-1 px-2 rounded-md', rewardRateSpan === RewardRateSpan.SECOND ? 'bg-blue-500 text-white font-bold border' : 'border')}>Sec</button>
+                        <button onClick={() => setRewardRateSpan(RewardRateSpan.DAY)} className={cn('py-1 px-2 rounded-md', rewardRateSpan === RewardRateSpan.DAY ? 'bg-blue-500 text-white font-bold border' : 'border')}>Day</button>
+                        <button onClick={() => setRewardRateSpan(RewardRateSpan.MONTH)} className={cn('py-1 px-2 rounded-md', rewardRateSpan === RewardRateSpan.MONTH ? 'bg-blue-500 text-white font-bold border' : 'border')}>Month</button>
+                    </div>
                 </div>
-            </div>
-        </div>
+            </div> 
         <div>
             <div className="font-semibold text-sm mb-2">Rewards left for</div>
             <div className="flex items-center justify-between">
@@ -89,16 +91,17 @@ const FarmRewardDetails = ({ token, rate, reward, incentiveKey, isBonus, rewardR
                 </div>
             </div>
         </div>
+        </> }
         <div className="flex gap-4 w-full mt-8 text-white">
-            <ManageRewardsModal title={'Refill'} functionName={'addRewards'} incentiveKey={incentiveKey as IncentiveKey} rewardRates={rewardRates} isBonus={isBonus} >
+            { !isDeactivated && <ManageRewardsModal title={'Refill'} functionName={'addRewards'} incentiveKey={incentiveKey as IncentiveKey} rewardRates={rewardRates} isBonus={isBonus} >
                 <button className="w-full p-2 bg-blue-500 font-bold rounded-xl hover:bg-blue-400">Refill</button>
-            </ManageRewardsModal>
+            </ManageRewardsModal> }
             <ManageRewardsModal title={'Withdraw'} functionName={'decreaseRewardsAmount'} incentiveKey={incentiveKey as IncentiveKey} rewardRates={rewardRates} isBonus={isBonus}>
                 <button className="w-full p-2 bg-blue-500 font-bold rounded-xl hover:bg-blue-400">Withdraw</button>
             </ManageRewardsModal>
-            <ManageRewardsModal title={'Change Rate per second'} functionName={'setRates'} incentiveKey={incentiveKey as IncentiveKey} rewardRates={rewardRates} isBonus={isBonus}>
+            { !isDeactivated && <ManageRewardsModal title={'Change Rate per second'} functionName={'setRates'} incentiveKey={incentiveKey as IncentiveKey} rewardRates={rewardRates} isBonus={isBonus}>
                 <button className="w-full p-2 bg-blue-500 font-bold rounded-xl hover:bg-blue-400">Change Rate</button>
-            </ManageRewardsModal>
+            </ManageRewardsModal> }
         </div>
     </div>
 
