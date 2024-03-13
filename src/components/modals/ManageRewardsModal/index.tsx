@@ -23,8 +23,8 @@ const ManageRewardsModal = ({ title, functionName, incentiveKey, rewardRates, is
 
     const [value, setValue] = useState<string>('')
 
-    const args = functionName === 'setRates' ? isBonus ? [rewardRates[0].value, parseUnits(value, rewardRates[1].decimals)] : [ parseUnits(value, rewardRates[0].decimals), rewardRates[1].value] 
-    : isBonus ? [ 0n, parseUnits(value, rewardRates[1].decimals) ] : [ parseUnits(value, rewardRates[0].decimals), 0n ]
+    const args = functionName === 'setRates' ? isBonus ? [rewardRates[0].value, parseUnits(value as `${number}`, rewardRates[1].decimals)] : [ parseUnits(value as `${number}`, rewardRates[0].decimals), rewardRates[1].value] 
+    : isBonus ? [ 0n, parseUnits(value as `${number}`, rewardRates[1].decimals) ] : [ parseUnits(value as `${number}`, rewardRates[0].decimals), 0n ]
 
     const { config } = usePrepareContractWrite({
         address: ALGEBRA_ETERNAL_FARMING,
