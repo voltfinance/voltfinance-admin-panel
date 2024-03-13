@@ -15,7 +15,7 @@ const Toolbar = ({ changeShowDeactivated }: { changeShowDeactivated: (state: boo
         </div> */}
         <div className="flex items-center gap-2">
             <Checkbox id="showDeactivated" onCheckedChange={changeShowDeactivated} />
-            <label htmlFor="showDeactivated" className="text-sm font-medium leading-none" >Show deacitvated</label>
+            <label htmlFor="showDeactivated" className="text-sm font-medium leading-none" >Show deactivated</label>
         </div>
     </div>
 }
@@ -29,7 +29,9 @@ const FarmHeader = () => <div className="hidden md:grid grid-cols-4 uppercase te
 
 const FarmRow = (farm: FarmingFieldsFragment) => {
 
-    const { token0, token1, reward, bonusReward, rewardToken, bonusRewardToken } = useFarmData(farm)
+    const { token0, token1, reward, bonusReward, rewardToken, bonusRewardToken, isDeactivated } = useFarmData(farm)
+
+    const isEmpty = isDeactivated && ( Number(reward) === 0 && ( Number(bonusReward) === 0 || !bonusReward ) )
 
     return <div className="grid grid-cols-1 gap-4 md:gap-0 md:grid-cols-4 w-full text-left p-4 bg-gray-50 border border-gray-300 rounded-xl">
         {token0 && token1 ? <div className="flex w-full justify-between">
@@ -44,9 +46,9 @@ const FarmRow = (farm: FarmingFieldsFragment) => {
             <div className="md:hidden font-bold">Bonus Rewards</div>
             <div>{`${bonusReward} ${bonusRewardToken.symbol}`}</div>
         </div> : <div></div> }
-        <div className="text-right">
+        { !isEmpty && <div className="text-right">
             <Link to={`/farms/${farm.id}`} state={farm} className="px-4 py-2 bg-blue-500 text-white font-bold rounded-xl hover:bg-blue-400">Manage →</Link>
-        </div>
+        </div> }
     </div>
 }
 
