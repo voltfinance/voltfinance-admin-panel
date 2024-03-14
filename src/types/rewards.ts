@@ -1,6 +1,10 @@
 export type IRewards = Partial<{
-    reward: bigint;
-    rewardRate: bigint;
-    bonusReward: bigint;
-    bonusRewardRate: bigint;
+    reward: string;
+    rewardBn: bigint;
+    rewardRate: string;
+    rewardRateBn: bigint;
+    bonusReward: string;
+    bonusRewardBn: bigint;
+    bonusRewardRate: string;
+    bonusRewardRateBn: bigint;
 }>

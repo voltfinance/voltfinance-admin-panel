@@ -174,13 +174,15 @@ const CreateFarm = () => {
     }
 
     const rewards: IRewards = {
-        reward: rewardAmount && rewardToken ? parseUnits(`${Number(rewardAmount)}`, rewardToken.decimals) : undefined,
-        rewardRate: rewardRate && rewardToken ? parseUnits(`${Number(rewardRate)}`, rewardToken.decimals) : undefined,
-        bonusReward: bonusRewardAmount && bonusRewardToken ? parseUnits(`${Number(bonusRewardAmount)}`, bonusRewardToken.decimals) : undefined,
-        bonusRewardRate: bonusRewardRate && bonusRewardToken ? parseUnits(`${Number(bonusRewardRate)}`, bonusRewardToken.decimals) : undefined,
+        reward: rewardAmount,
+        rewardBn: rewardAmount && rewardToken ? parseUnits(rewardAmount as `${number}`, rewardToken.decimals) : undefined,
+        rewardRate: rewardRate,
+        rewardRateBn: rewardRate && rewardToken ? parseUnits(rewardRate as `${number}`, rewardToken.decimals) : undefined,
+        bonusReward: bonusRewardAmount,
+        bonusRewardBn: bonusRewardAmount && bonusRewardToken ? parseUnits(bonusRewardAmount as `${number}`, bonusRewardToken.decimals) : undefined,
+        bonusRewardRate: bonusRewardRate,
+        bonusRewardRateBn: bonusRewardRate && bonusRewardToken ? parseUnits(bonusRewardRate as `${number}`, bonusRewardToken.decimals) : undefined,
     }
-
-    console.log('KEY', incentveKey, rewards)
 
     return <div className="grid grid-cols-1 md:grid-cols-2 md:gap-8 w-full">
         
@@ -218,7 +220,7 @@ const CreateFarm = () => {
 
                     <InputNumber control={control} name={'bonusRewardAmount'} title={`Enter ${bonusRewardToken?.symbol || 'Bonus Reward'} Amount`} isRequired maxDecimals={bonusRewardToken?.decimals} disabled={!bonusRewardToken || !hasSecondReward} />
 
-                    <RewardRate control={control} name={'bonusRewardRate'} title={`Enter ${rewardToken?.symbol || 'Bonus Reward'} Distirbution Rate per second`}  isRequired maxDecimals={bonusRewardToken?.decimals} disabled={!bonusRewardToken || !bonusRewardAmount || !hasSecondReward} />
+                    <RewardRate control={control} name={'bonusRewardRate'} title={`Enter ${bonusRewardToken ?.symbol || 'Bonus Reward'} Distirbution Rate per second`}  isRequired maxDecimals={bonusRewardToken?.decimals} disabled={!bonusRewardToken || !bonusRewardAmount || !hasSecondReward} />
 
                 </> }
 
