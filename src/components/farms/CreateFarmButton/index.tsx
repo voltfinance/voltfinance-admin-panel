@@ -35,11 +35,25 @@ const CreateFarmButton = ({
 
     const areRewardsReady = rewardBn && rewardRateBn && (hasSecondReward ? Boolean(bonusRewardBn && bonusRewardRateBn) : true)
 
+    const rewardCurrency = useCurrency(rewardToken)
+    const bonusRewardCurrency=  useCurrency(bonusRewardToken)
+
+    const [parsedRewardAmount, parsedBonusRewardAmount] = [
+        tryParseAmount(reward, rewardCurrency),
+        tryParseAmount(bonusReward, bonusRewardCurrency)
+    ] 
+
+    const { approvalState: approvalStateReward, approvalCallback: approvalCallbackReward } = useApprove(parsedRewardAmount, ALGEBRA_ETERNAL_FARMING);
+    const { approvalState: approvalStateBonusReward, approvalCallback: approvalCallbackBonusReward } = useApprove(parsedBonusRewardAmount, ALGEBRA_ETERNAL_FARMING);
+    
+    const showApproveReward = approvalStateReward === ApprovalState.NOT_APPROVED || approvalStateReward === ApprovalState.PENDING
+    const showApproveBonusReward = approvalStateBonusReward === ApprovalState.NOT_APPROVED || approvalStateBonusReward === ApprovalState.PENDING
+
     const { config } = usePrepareContractWrite({
         address: ALGEBRA_ETERNAL_FARMING,
         abi: eternalFarmingABI,
         functionName: 'createEternalFarming',
-        args: isKeyReady && areRewardsReady ? [
+        args: isKeyReady && areRewardsReady && !showApproveReward && !showApproveBonusReward ? [
             { 
                 rewardToken,
                 bonusRewardToken: bonusRewardToken || '0x0000000000000000000000000000000000000000',
@@ -61,20 +75,6 @@ const CreateFarmButton = ({
 
     const { isLoading, isSuccess } = useTransitionAwait(data?.hash, `Create Farm`)
 
-    const rewardCurrency = useCurrency(rewardToken)
-    const bonusRewardCurrency=  useCurrency(bonusRewardToken)
-
-    const [parsedRewardAmount, parsedBonusRewardAmount] = [
-        tryParseAmount(reward, rewardCurrency),
-        tryParseAmount(bonusReward, bonusRewardCurrency)
-    ] 
-
-    const { approvalState: approvalStateReward, approvalCallback: approvalCallbackReward } = useApprove(parsedRewardAmount, ALGEBRA_ETERNAL_FARMING);
-    const { approvalState: approvalStateBonusReward, approvalCallback: approvalCallbackBonusReward } = useApprove(parsedBonusRewardAmount, ALGEBRA_ETERNAL_FARMING);
-    
-    const showApproveReward = approvalStateReward === ApprovalState.NOT_APPROVED || approvalStateReward === ApprovalState.PENDING
-    const showApproveBonusReward = approvalStateBonusReward === ApprovalState.NOT_APPROVED || approvalStateBonusReward === ApprovalState.PENDING
-
     useEffect(() => {
         if (isSuccess) {
             navigate('/farms')
@@ -87,7 +87,7 @@ const CreateFarmButton = ({
         {approvalStateReward === ApprovalState.PENDING ? <Loader /> : approvalStateReward === ApprovalState.APPROVED ? 'Approved' : `Approve ${rewardCurrency?.symbol}`}
     </button>
 
-    if (showApproveBonusReward) return <button disabled={approvalStateReward !== ApprovalState.NOT_APPROVED} onClick={() => approvalCallbackBonusReward && approvalCallbackBonusReward()} className="flex justify-center py-4 bg-blue-500 text-white font-bold rounded-xl hover:bg-blue-600 disabled:bg-blue-300 disabled:cursor-not-allowed">
+    if (showApproveBonusReward) return <button disabled={approvalStateBonusReward !== ApprovalState.NOT_APPROVED} onClick={() => approvalCallbackBonusReward && approvalCallbackBonusReward()} className="flex justify-center py-4 bg-blue-500 text-white font-bold rounded-xl hover:bg-blue-600 disabled:bg-blue-300 disabled:cursor-not-allowed">
         {approvalStateBonusReward === ApprovalState.PENDING ? <Loader /> : approvalStateBonusReward === ApprovalState.APPROVED ? 'Approved' : `Approve ${bonusRewardCurrency?.symbol}`}
     </button>
 

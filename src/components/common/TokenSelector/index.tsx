@@ -55,14 +55,14 @@ const Search = ({ data, onSearch }: { data: TokenFieldsFragment[], onSearch: (ma
         type='text'
         placeholder='Search name or paste address'
         autoComplete='off'
-        className='w-full text-black px-4 py-3 bg-card-dark rounded-xl border border-card-border'
+        className='w-full text-black px-4 py-3 bg-card-dark rounded-xl border'
         onChange={e => handleInput(e.target.value)}
     />
 
 
 }
 
-const LoadingRow = () => <div className='w-full mb-4 h-[60px] text-left bg-card rounded-2xl animate-pulse'></div>
+const LoadingRow = () => <div className='w-full mb-4 h-[60px] text-left bg-gray-100 rounded-2xl animate-pulse'></div>
 
 const TokenRow = ({ account, token, onSelect, otherCurrency, style }: { token: TokenFieldsFragment, account: Address | undefined, onSelect: (currency: Currency) => void, otherCurrency: Currency | null | undefined, style: React.CSSProperties }) => {
 
