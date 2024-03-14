@@ -2,8 +2,8 @@ import { TokenFieldsFragment } from '@/graphql/generated/graphql'
 import { useAlgebraToken } from '@/hooks/common/useAlgebraToken'
 import { useCurrency } from '@/hooks/common/useCurrency'
 import useDebounce from '@/hooks/common/useDebounce'
-import { useFuse } from '@/hooks/common/useFuse'  
-import { useAllTokens } from '@/hooks/tokens/useAllTokens' 
+import { useFuse } from '@/hooks/common/useFuse'
+import { useAllTokens } from '@/hooks/tokens/useAllTokens'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FixedSizeList } from 'react-window'
 import { Address, isAddress } from 'viem'
@@ -11,7 +11,7 @@ import { useAccount, useBalance } from 'wagmi'
 import CurrencyLogo from '../CurrencyLogo'
 import { ADDRESS_ZERO, Currency, ExtendedNative, Token } from '@cryptoalgebra/integral-sdk'
 import { formatCurrency } from '@/utils/common/formatCurrency'
-import { useTokensState } from '@/state/tokensStore' 
+import { useTokensState } from '@/state/tokensStore'
 import { Copy } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -55,7 +55,7 @@ const Search = ({ data, onSearch }: { data: TokenFieldsFragment[], onSearch: (ma
         type='text'
         placeholder='Search name or paste address'
         autoComplete='off'
-        className='w-full text-white px-4 py-3 bg-card-dark rounded-xl border border-card-border'
+        className='w-full text-black px-4 py-3 bg-card-dark rounded-xl border border-card-border'
         onChange={e => handleInput(e.target.value)}
     />
 
@@ -64,7 +64,7 @@ const Search = ({ data, onSearch }: { data: TokenFieldsFragment[], onSearch: (ma
 
 const LoadingRow = () => <div className='w-full mb-4 h-[60px] text-left bg-card rounded-2xl animate-pulse'></div>
 
-const TokenRow = ({ account, token, onSelect, otherCurrency }: { token: TokenFieldsFragment, account: Address | undefined, onSelect: (currency: Currency) => void, otherCurrency: Currency | null | undefined }) => {
+const TokenRow = ({ account, token, onSelect, otherCurrency, style }: { token: TokenFieldsFragment, account: Address | undefined, onSelect: (currency: Currency) => void, otherCurrency: Currency | null | undefined, style: React.CSSProperties }) => {
 
     const currency = useCurrency(token.id as Address)
 
@@ -85,7 +85,7 @@ const TokenRow = ({ account, token, onSelect, otherCurrency }: { token: TokenFie
         })
     }
 
-    return <button disabled={lock} className='flex items-center justify-between w-full mb-4 py-2 px-3 text-left bg-card rounded-2xl duration-75 hover:bg-card-hover disabled:hover:bg-card disabled:opacity-60' onClick={() => currency && onSelect(currency)}>
+    return <button disabled={lock} className='flex items-center justify-between w-full py-2 px-3 text-left bg-card rounded-2xl duration-75 hover:bg-card-hover disabled:hover:bg-card disabled:opacity-60' onClick={() => currency && onSelect(currency)} style={{...style, height: 76 - 16}}>
         <div className='flex items-center gap-4'>
             <div>
                 <CurrencyLogo currency={currency} size={32} />
@@ -107,11 +107,10 @@ const TokenRow = ({ account, token, onSelect, otherCurrency }: { token: TokenFie
             {isLoading ? 'Loading...' : balance ? formatCurrency.format(Number(balance.formatted)) : ''}
         </div>
     </button>
-
 }
 
 const ImportTokenRow = ({ token, onImport }: { token: Token, onImport: (token: Token) => void }) => <div className='flex justify-between w-full text-left'>
-        <div className='flex gap-4'>
+        <div className='flex items-center gap-4'>
             <div>
                 <CurrencyLogo currency={token} size={32} />
             </div>
@@ -120,7 +119,7 @@ const ImportTokenRow = ({ token, onImport }: { token: Token, onImport: (token: T
                 <div>{token.name}</div>
             </div>
         </div>
-        <button onClick={() => onImport(token)}>Import</button>
+        <button className='px-4 bg-blue-500 text-white font-bold hover:bg-blue-400 rounded-2xl text-md' onClick={() => onImport(token)}>Import</button>
     </div>
 
 
@@ -157,13 +156,13 @@ export const TokenSelector = ({ onSelect, otherCurrency }: { onSelect: (currency
         setTokenForImport(undefined)
     }
 
-    const Row = useCallback(({ data, index }: { data: TokenFieldsFragment[], index: number }) => {
+    const Row = useCallback(({ data, index, style }: { data: TokenFieldsFragment[], index: number, style: React.CSSProperties }) => {
 
         const token = data[index]
 
         if (!token) return null
 
-        return <TokenRow account={account} onSelect={onSelect} token={token} otherCurrency={otherCurrency} />
+        return <TokenRow account={account} onSelect={onSelect} token={token} otherCurrency={otherCurrency} style={style} />
 
     }, [account, onSelect, otherCurrency])
 
@@ -187,7 +186,7 @@ export const TokenSelector = ({ onSelect, otherCurrency }: { onSelect: (currency
                 {LoadingRow}
             </FixedSizeList>
             : 
-            <FixedSizeList  
+            <FixedSizeList
                 width={'100%'}
                 height={304}
                 itemData={filteredTokens}

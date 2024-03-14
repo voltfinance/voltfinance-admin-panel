@@ -46,7 +46,7 @@ const CurrencyLogo = ({ currency, size, className, style = {} }: CurrencyLogoPro
         return <img src={EthLogo} alt={'ETH'} className={classString} style={{ ...style, minWidth: `${size}px`, minHeight: `${size}px`, width: `${size}px`, height: `${size}px` }} />
     }
 
-    return <div className={`${classString} flex items-center justify-center bg-white text-black`} style={{ minWidth: `${size}px`, minHeight: `${size}px`, width: `${size}px`, height: `${size}px`, ...style }}>
+    return <div className={`${classString} flex items-center justify-center bg-gray-200 text-black`} style={{ minWidth: `${size}px`, minHeight: `${size}px`, width: `${size}px`, height: `${size}px`, ...style }}>
         {currency.symbol?.slice(0, 2)}
     </div>
 
