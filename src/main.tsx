@@ -12,6 +12,8 @@ import LayoutApp from './App.tsx';
 import FarmPage from './pages/Farm/index.tsx';
 import NewFarmPage from './pages/NewFarm/index.tsx';
 import PoolsPage from './pages/Pools/index.tsx';
+import PoolDetails from './components/pool/PoolDetails/index.tsx';
+import PoolPage from './pages/Pool/index.tsx';
 
 const router = createBrowserRouter([
     {
@@ -22,7 +24,6 @@ const router = createBrowserRouter([
         path: '/farms',
         element: (
             <LayoutApp>
-                {' '}
                 <FarmsPage />{' '}
             </LayoutApp>
         ),
@@ -31,7 +32,6 @@ const router = createBrowserRouter([
         path: '/farms/:farm',
         element: (
             <LayoutApp>
-                {' '}
                 <FarmPage />{' '}
             </LayoutApp>
         ),
@@ -40,7 +40,6 @@ const router = createBrowserRouter([
         path: '/new-farm',
         element: (
             <LayoutApp>
-                {' '}
                 <NewFarmPage />{' '}
             </LayoutApp>
         ),
@@ -49,8 +48,15 @@ const router = createBrowserRouter([
         path: '/pools',
         element: (
             <LayoutApp>
-                {' '}
                 <PoolsPage />{' '}
+            </LayoutApp>
+        ),
+    },
+    {
+        path: '/pools/:pool',
+        element: (
+            <LayoutApp>
+                <PoolPage />{' '}
             </LayoutApp>
         ),
     },

@@ -1,40 +1,56 @@
-import { ContractConfig, defineConfig } from "@wagmi/cli";
-import { actions, react } from '@wagmi/cli/plugins'
-import { algebraFactoryABI, algebraPoolABI, eternalFarmingABI, farmingCenterABI } from './src/abis'
-import { ALGEBRA_FARMING_CENTER, ALGEBRA_ETERNAL_FARMING, ALGEBRA_FACTORY } from './src/constants/addresses'
+import { ContractConfig, defineConfig } from '@wagmi/cli';
+import { actions, react } from '@wagmi/cli/plugins';
+import {
+    algebraFactoryABI,
+    algebraPoolABI,
+    eternalFarmingABI,
+    farmingCenterABI,
+    pluginFactoryABI,
+} from './src/abis';
+import {
+    ALGEBRA_FARMING_CENTER,
+    ALGEBRA_ETERNAL_FARMING,
+    ALGEBRA_FACTORY,
+    PLUGIN_FACTORY,
+} from './src/constants/addresses';
 
 const contracts: ContractConfig[] = [
     {
         address: ALGEBRA_FARMING_CENTER,
         name: 'FarmingCenter',
-        abi: farmingCenterABI
+        abi: farmingCenterABI,
     },
     {
         address: ALGEBRA_ETERNAL_FARMING,
         name: 'EternalFarming',
-        abi: eternalFarmingABI
+        abi: eternalFarmingABI,
     },
     {
-      address: ALGEBRA_FACTORY,
-      name: 'AlgebraFactory',
-      abi: algebraFactoryABI
+        address: ALGEBRA_FACTORY,
+        name: 'AlgebraFactory',
+        abi: algebraFactoryABI,
     },
     {
-      name: 'AlgebraPool',
-      abi: algebraPoolABI
-    }
-]
+        address: PLUGIN_FACTORY,
+        name: 'PluginFactory',
+        abi: pluginFactoryABI,
+    },
+    {
+        name: 'AlgebraPool',
+        abi: algebraPoolABI,
+    },
+];
 
 export default defineConfig({
     out: 'src/generated.ts',
     contracts,
     plugins: [
-      actions({
-        watchContractEvent: false
-      }),
-      react({
-        useContractEvent: false,
-        useContractItemEvent: false
-      })
+        actions({
+            watchContractEvent: false,
+        }),
+        react({
+            useContractEvent: false,
+            useContractItemEvent: false,
+        }),
     ],
-  })
+});

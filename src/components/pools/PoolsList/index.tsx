@@ -15,14 +15,17 @@ const PoolHeader = () => (
 );
 
 const PoolRow = (pool: FormattedPool) => {
-    console.log(pool);
-
     return (
         <div className="grid grid-cols-5 gap-4 md:gap-0 md:grid-cols-5 w-full text-left p-4 bg-gray-50 border border-gray-300 rounded-xl">
             {pool.pair.token0 && pool.pair.token1 && (
                 <div className="flex w-full justify-between">
                     <div className="md:hidden font-bold">Pool</div>
-                    <div>{`${pool.pair.token0.symbol} / ${pool.pair.token1.symbol}`}</div>
+                    <div className="flex items-center gap-4">
+                        <p>
+                            {`${pool.pair.token0.symbol} / ${pool.pair.token1.symbol}`}
+                        </p>
+                        <div className="bg-blue-200 text-sm rounded-xl px-2 py-1">{`${pool.fee}%`}</div>
+                    </div>
                 </div>
             )}
             {pool.tvlUSD ? (
@@ -92,7 +95,7 @@ const PoolsList = () => {
                     <PoolHeader />
                     <div className="grid grid-cols-1 gap-4">
                         {formattedPools.map((pool) => (
-                            <PoolRow {...pool} />
+                            <PoolRow key={pool.id} {...pool} />
                         ))}
                     </div>
                 </div>
