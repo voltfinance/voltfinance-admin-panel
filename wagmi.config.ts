@@ -1,6 +1,7 @@
 import { ContractConfig, defineConfig } from '@wagmi/cli';
 import { actions, react } from '@wagmi/cli/plugins';
 import {
+    algebraBasePluginABI,
     algebraFactoryABI,
     algebraPoolABI,
     eternalFarmingABI,
@@ -38,6 +39,10 @@ const contracts: ContractConfig[] = [
     {
         name: 'AlgebraPool',
         abi: algebraPoolABI,
+    },
+    {
+        name: 'AlgebraBasePlugin',
+        abi: algebraBasePluginABI,
     },
 ];
 
