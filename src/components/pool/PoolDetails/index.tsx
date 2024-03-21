@@ -30,11 +30,11 @@ const PoolDetails = ({ pool, poolId }: IPoolDetails) => {
                 </div>
                 <div>
                     <p className="font-semibold text-sm">Fees USD</p>
-                    <p>{pool.feesUSD}</p>
+                    <p>{pool.feesUSD} $</p>
                 </div>
                 <div>
                     <p className="font-semibold text-sm">Untracked Fees USD</p>
-                    <p>{pool.untrackedFeesUSD}</p>
+                    <p>{pool.untrackedFeesUSD} $</p>
                 </div>
                 <div>
                     <p className="font-semibold text-sm">
@@ -46,11 +46,6 @@ const PoolDetails = ({ pool, poolId }: IPoolDetails) => {
                     <p className="font-semibold text-sm">Current Tick</p>
                     <p>{pool.tick}</p>
                 </div>
-            </div>
-            <div className="w-full mt-auto">
-                <button className="flex justify-center w-full py-2 px-4 border border-red-200 text-red-500 font-bold rounded-xl hover:bg-red-500 hover:text-white">
-                    Deactivate
-                </button>
             </div>
         </div>
     );

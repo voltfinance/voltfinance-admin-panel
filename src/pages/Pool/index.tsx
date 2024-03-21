@@ -36,9 +36,9 @@ const PoolPage = () => {
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
                         <PoolDetails poolId={poolId} pool={pool.pool} />
-                        <PoolSettings poolId={poolId} />
+                        <ManagePlugins poolId={poolId} />
                         <TokenDetails poolId={poolId} name="Tokens" />
-                        <ManagePlugins />
+                        <PoolSettings poolId={poolId} />
                     </div>
                 </>
             ) : (

@@ -1,4 +1,4 @@
-import CopyButton from '@/components/common/CopyButton';
+import DataWithCopyButton from '@/components/common/DataWithCopyButton';
 import Loader from '@/components/common/Loader';
 import { useSinglePoolQuery } from '@/graphql/generated/graphql';
 import { formatCurrency } from '@/utils/common/formatCurrency';
@@ -8,13 +8,6 @@ interface IFarmPoolDetails {
     name: string;
     id: string;
 }
-
-const DataWithCopyButton = ({ data }: { data: string }) => (
-    <div className="flex items-center">
-        <span className="mr-2">{data}</span>
-        <CopyButton data={data} />
-    </div>
-);
 
 const FarmPoolDetails = ({ name, id }: IFarmPoolDetails) => {
     const { data: pool } = useSinglePoolQuery({
