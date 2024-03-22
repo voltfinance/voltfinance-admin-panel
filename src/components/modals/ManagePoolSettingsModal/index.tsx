@@ -51,7 +51,8 @@ const ManagePoolSettingsModal = ({
     const [value, setValue] = useState<number>(
         initialTickSpacing || initialCommunityFee || 0
     );
-    const [dynamicFee, setDynamicFee] = useState<FeeConfiguration>(initialFee);
+    const [adaptiveFee, setAdaptiveFee] =
+        useState<FeeConfiguration>(initialFee);
 
     const { data: pluginId } = useAlgebraPoolPlugin({
         address: functionName !== 'setFee' ? poolId : undefined,
@@ -60,7 +61,7 @@ const ManagePoolSettingsModal = ({
     const { config: feeConfig } =
         usePrepareAlgebraBasePluginChangeFeeConfiguration({
             address: pluginId || undefined,
-            args: [dynamicFee],
+            args: [adaptiveFee],
         });
 
     const { data: feeHash, write: setFeeConfiguration } =
@@ -84,7 +85,7 @@ const ManagePoolSettingsModal = ({
 
     const handleConfirm = () => {
         if (functionName === 'setFee') {
-            console.log(dynamicFee);
+            console.log(adaptiveFee);
             setFeeConfiguration?.();
         } else {
             console.log(value);
@@ -107,7 +108,7 @@ const ManagePoolSettingsModal = ({
                     }
                 >
                     {functionName === 'setFee' ? (
-                        Object.entries(dynamicFee).map(([key, feeValue]) => (
+                        Object.entries(adaptiveFee).map(([key, feeValue]) => (
                             <label key={key} className="">
                                 <h4 className="">{key}</h4>
                                 <Input
@@ -118,7 +119,7 @@ const ManagePoolSettingsModal = ({
                                     value={feeValue}
                                     placeholder="Enter amount"
                                     onChange={(e) => {
-                                        setDynamicFee((prev) => ({
+                                        setAdaptiveFee((prev) => ({
                                             ...prev,
                                             [key]: Number(e.target.value),
                                         }));
