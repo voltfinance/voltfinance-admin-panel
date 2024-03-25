@@ -1,3 +1,4 @@
+import DataWithCopyButton from '@/components/common/DataWithCopyButton';
 import { PoolFieldsFragment } from '@/graphql/generated/graphql';
 import { Address } from 'wagmi';
 
@@ -13,8 +14,8 @@ const PoolDetails = ({ pool, poolId }: IPoolDetails) => {
             <div className="font-bold mb-4">Pool Details</div>
             <div className="flex flex-col gap-4">
                 <div>
-                    <p className="font-semibold text-sm">Pool ID</p>
-                    <p>{poolId}</p>
+                    <p className="font-semibold text-sm">Pool address</p>
+                    <DataWithCopyButton data={poolId} />
                 </div>
                 <div>
                     <p className="font-semibold text-sm">TVL USD</p>

@@ -37,25 +37,31 @@ export function useBasePluginFeeConfiguration({
     poolId,
 }: {
     poolId: Address;
-}): FeeConfiguration {
-    const { data: pluginId } = useAlgebraPoolPlugin({
-        address: poolId,
-    });
+}): FeeConfiguration | undefined {
+    const { data: pluginId, isLoading: isLoadingPlugin } = useAlgebraPoolPlugin(
+        {
+            address: poolId,
+        }
+    );
 
-    const { data: defaultFeeConfiguration } = useAlgebraBasePluginFeeConfig({
-        address: pluginId,
-    });
+    const { data: defaultFeeConfiguration, isLoading: isLoadingFee } =
+        useAlgebraBasePluginFeeConfig({
+            address: pluginId,
+        });
 
-    if (!defaultFeeConfiguration) {
-        return initialFee;
+    const isLoading = isLoadingPlugin || isLoadingFee;
+
+    if (defaultFeeConfiguration !== undefined && !isLoading) {
+        return {
+            alpha1: defaultFeeConfiguration[0],
+            alpha2: defaultFeeConfiguration[1],
+            beta1: defaultFeeConfiguration[2],
+            beta2: defaultFeeConfiguration[3],
+            gamma1: defaultFeeConfiguration[4],
+            gamma2: defaultFeeConfiguration[5],
+            baseFee: defaultFeeConfiguration[6],
+        };
     }
-    return {
-        alpha1: defaultFeeConfiguration[0],
-        alpha2: defaultFeeConfiguration[1],
-        beta1: defaultFeeConfiguration[2],
-        beta2: defaultFeeConfiguration[3],
-        gamma1: defaultFeeConfiguration[4],
-        gamma2: defaultFeeConfiguration[5],
-        baseFee: defaultFeeConfiguration[6],
-    };
+
+    return undefined;
 }

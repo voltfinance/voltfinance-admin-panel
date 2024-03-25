@@ -1,29 +1,28 @@
 import DataWithCopyButton from '@/components/common/DataWithCopyButton';
 import Loader from '@/components/common/Loader';
-import ManagePluginConfigModal from '@/components/modals/ManagePluginConfigModal';
+import SetPluginAddressModal from '@/components/modals/pool/ChangePluginAddressModal';
+import ManagePluginConfigModal from '@/components/modals/pool/ManagePluginConfigModal';
 import { Switch } from '@/components/ui/switch';
 import {
-    useAlgebraPoolGlobalState,
     useAlgebraPoolPlugin,
     usePrepareAlgebraPoolSetPluginConfig,
 } from '@/generated';
 import { useTransitionAwait } from '@/hooks/common/useTransactionAwait';
+import { usePluginConfig } from '@/hooks/pools/usePluginConfig';
+import { usePluginFlags } from '@/hooks/pools/usePluginFlags';
 import { PluginFlags } from '@/types/pool-plugin-flags';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Address, useContractWrite } from 'wagmi';
 interface IManagePlugins {
     poolId: Address;
 }
 
 const ManagePlugins = ({ poolId }: IManagePlugins) => {
-    const [flags, setFlags] = useState<PluginFlags>();
-    const [pluginConfig, setPluginConfig] = useState<number>();
+    const pluginFlags = usePluginFlags(poolId);
+    const [flags, setFlags] = useState<PluginFlags | null>(pluginFlags);
+    const pluginConfig = usePluginConfig(flags);
 
     const { data: pluginId } = useAlgebraPoolPlugin({
-        address: poolId,
-    });
-
-    const { data: globalState } = useAlgebraPoolGlobalState({
         address: poolId,
     });
 
@@ -41,43 +40,10 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
         'Set Plugin'
     );
 
-    useEffect(() => {
-        if (!globalState) return;
-        const tempPluginConfig = globalState[3];
-
-        setFlags({
-            BEFORE_SWAP_FLAG: tempPluginConfig & 1,
-            AFTER_SWAP_FLAG: (tempPluginConfig >> 1) & 1,
-            BEFORE_POSITION_MODIFY_FLAG: (tempPluginConfig >> 2) & 1,
-            AFTER_POSITION_MODIFY_FLAG: (tempPluginConfig >> 3) & 1,
-            BEFORE_FLASH_FLAG: (tempPluginConfig >> 4) & 1,
-            AFTER_FLASH_FLAG: (tempPluginConfig >> 5) & 1,
-            AFTER_INIT_FLAG: (tempPluginConfig >> 6) & 1,
-            DYNAMIC_FEE_FLAG: (tempPluginConfig >> 7) & 1,
-        });
-        setPluginConfig(tempPluginConfig);
-    }, [globalState]);
-
-    useEffect(() => {
-        if (!flags) return;
-
-        let updatedPluginConfig = 0;
-        updatedPluginConfig |= flags.BEFORE_SWAP_FLAG;
-        updatedPluginConfig |= flags.AFTER_SWAP_FLAG << 1;
-        updatedPluginConfig |= flags.BEFORE_POSITION_MODIFY_FLAG << 2;
-        updatedPluginConfig |= flags.AFTER_POSITION_MODIFY_FLAG << 3;
-        updatedPluginConfig |= flags.BEFORE_FLASH_FLAG << 4;
-        updatedPluginConfig |= flags.AFTER_FLASH_FLAG << 5;
-        updatedPluginConfig |= flags.AFTER_INIT_FLAG << 6;
-        updatedPluginConfig |= flags.DYNAMIC_FEE_FLAG << 7;
-
-        setPluginConfig(updatedPluginConfig);
-    }, [flags]);
-
     const handleCheckFlag = (flag: keyof PluginFlags) => {
         if (!flags) return;
         setFlags((prev) => {
-            if (!prev) return;
+            if (!prev) return null;
             const updatedFlags = { ...prev };
 
             if (flag === 'DYNAMIC_FEE_FLAG') {
@@ -86,6 +52,7 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
             } else {
                 updatedFlags[flag] = prev[flag] ? 0 : 1;
             }
+
             return updatedFlags;
         });
     };
@@ -96,8 +63,8 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
     };
 
     return (
-        <div className="flex flex-col text-left p-4 border rounded-xl">
-            <div className="font-bold mb-4">Manage Plugins</div>
+        <div className="flex flex-col gap-4 text-left p-4 border rounded-xl">
+            <div className="font-bold">Manage Plugins</div>
             {pluginId && flags && (
                 <div className="flex flex-col gap-4">
                     <div>
@@ -116,7 +83,7 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
                     <div className="flex items-center justify-between">
                         <label htmlFor="farmingsPlugin">
                             <p className="font-semibold text-sm">
-                                On-chain farmings Plugin
+                                On-chain farmings Setup
                             </p>
                             <p>AFTER_SWAP_FLAG = {flags.AFTER_SWAP_FLAG}</p>
                         </label>
@@ -131,7 +98,7 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
                     <div className="flex items-center justify-between">
                         <label htmlFor="oraclePlugin">
                             <p className="font-semibold text-sm">
-                                TWAP Oracle Plugin
+                                TWAP Oracle Setup
                             </p>
                             <p>BEFORE_SWAP_FLAG = {flags.BEFORE_SWAP_FLAG}</p>
                         </label>
@@ -146,7 +113,7 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
                     <div className="flex items-center justify-between">
                         <label htmlFor="dynamicFeePlugin">
                             <p className="font-semibold text-sm">
-                                Dynamic Fees Plugin
+                                Dynamic Fees Setup
                             </p>
                             <p>BEFORE_SWAP_FLAG = {flags.BEFORE_SWAP_FLAG}</p>
                             <p>DYNAMIC_FEE = {flags.DYNAMIC_FEE_FLAG}</p>
@@ -170,7 +137,8 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
                     </button>
                 </div>
             )}
-            {flags && pluginConfig !== undefined && (
+
+            {flags && pluginId && pluginConfig !== undefined && (
                 <ManagePluginConfigModal
                     pluginConfig={pluginConfig}
                     onChange={handleCheckFlag}
@@ -183,6 +151,16 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
                         Custom Hooks Settings
                     </button>
                 </ManagePluginConfigModal>
+            )}
+            {pluginId && (
+                <SetPluginAddressModal
+                    poolId={poolId}
+                    title="Set Plugin Address"
+                >
+                    <button className="py-2 px-4 w-full mt-auto border border-blue-500 text-blue-500 bg-white font-bold rounded-xl hover:bg-blue-500 hover:text-white">
+                        Change Plugin Address
+                    </button>
+                </SetPluginAddressModal>
             )}
         </div>
     );

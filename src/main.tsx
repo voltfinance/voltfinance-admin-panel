@@ -12,7 +12,6 @@ import LayoutApp from './App.tsx';
 import FarmPage from './pages/Farm/index.tsx';
 import NewFarmPage from './pages/NewFarm/index.tsx';
 import PoolsPage from './pages/Pools/index.tsx';
-import PoolDetails from './components/pool/PoolDetails/index.tsx';
 import PoolPage from './pages/Pool/index.tsx';
 
 const router = createBrowserRouter([
