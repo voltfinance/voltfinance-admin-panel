@@ -29,7 +29,7 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
     const { config: preparedPluginConfig } =
         usePrepareAlgebraPoolSetPluginConfig({
             address: poolId,
-            args: pluginConfig ? [pluginConfig] : undefined,
+            args: [pluginConfig],
         });
 
     const { data: setPluginConfigHash, write } =
@@ -58,7 +58,7 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
     };
 
     const handleConfirm = () => {
-        if (!flags || isLoading) return;
+        if (isLoading) return;
         write?.();
     };
 
@@ -148,7 +148,7 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
                     flags={flags}
                 >
                     <button className="py-2 px-4 w-full mt-auto border border-blue-500 text-blue-500 bg-white font-bold rounded-xl hover:bg-blue-500 hover:text-white">
-                        Custom Hooks Settings
+                        Manage Plugin Config
                     </button>
                 </ManagePluginConfigModal>
             )}

@@ -4,12 +4,12 @@ import { useMemo } from 'react';
 import { Address } from 'wagmi';
 
 export function usePluginFlags(poolId: Address): PluginFlags | null {
-    const { data: globalState } = useAlgebraPoolGlobalState({
+    const { data: globalState, isLoading } = useAlgebraPoolGlobalState({
         address: poolId,
     });
 
     return useMemo(() => {
-        if (!globalState) return null;
+        if (!globalState || isLoading) return null;
 
         const tempPluginConfig = globalState[3];
 
@@ -23,5 +23,5 @@ export function usePluginFlags(poolId: Address): PluginFlags | null {
             AFTER_INIT_FLAG: (tempPluginConfig >> 6) & 1,
             DYNAMIC_FEE_FLAG: (tempPluginConfig >> 7) & 1,
         };
-    }, [globalState]);
+    }, [globalState, isLoading]);
 }
