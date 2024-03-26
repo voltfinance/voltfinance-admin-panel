@@ -11,3 +11,6 @@ export const ALGEBRA_FACTORY: Address =
 
 export const PLUGIN_FACTORY: Address =
     '0x49BE8AA6c684b15e0C5450e8Fa0b16Bec1435596';
+
+export const ALGEBRA_STUB_PLUGIN: Address =
+    '0xeD5B07Dd0F19c7412BF318ADaaFe52089f39B224';

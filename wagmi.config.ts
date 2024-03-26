@@ -1,3 +1,4 @@
+import { algebraStubPluginABI } from './src/abis/algebraStubPlugin';
 import { ContractConfig, defineConfig } from '@wagmi/cli';
 import { actions, react } from '@wagmi/cli/plugins';
 import {
@@ -13,6 +14,7 @@ import {
     ALGEBRA_ETERNAL_FARMING,
     ALGEBRA_FACTORY,
     PLUGIN_FACTORY,
+    ALGEBRA_STUB_PLUGIN,
 } from './src/constants/addresses';
 
 const contracts: ContractConfig[] = [
@@ -43,6 +45,11 @@ const contracts: ContractConfig[] = [
     {
         name: 'AlgebraBasePlugin',
         abi: algebraBasePluginABI,
+    },
+    {
+        name: 'AlgebraStubPlugin',
+        abi: algebraStubPluginABI,
+        address: ALGEBRA_STUB_PLUGIN,
     },
 ];
 
