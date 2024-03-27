@@ -13,20 +13,24 @@ import { usePrepareAlgebraPoolSetPlugin } from '@/generated';
 import { useTransitionAwait } from '@/hooks/common/useTransactionAwait';
 import { Address, useContractWrite } from 'wagmi';
 
-interface IDeactivatePoolModal {
+interface IPoolActivationModal {
     title: string;
     children: React.ReactNode;
     poolId: Address;
+    pluginId: Address;
+    isToActivate: boolean;
 }
 
-const DeactivatePoolModal = ({
+const PoolActivationModal = ({
     title,
     children,
     poolId,
-}: IDeactivatePoolModal) => {
+    pluginId,
+    isToActivate,
+}: IPoolActivationModal) => {
     const { config } = usePrepareAlgebraPoolSetPlugin({
         address: poolId,
-        args: [ALGEBRA_STUB_PLUGIN],
+        args: [pluginId],
     });
 
     const { data, write } = useContractWrite(config);
@@ -50,13 +54,18 @@ const DeactivatePoolModal = ({
                     </div>
                     <hr />
                     <div>
-                        This will change current plugin address to stub plugin
-                        address.
+                        This will change Current plugin address to{' '}
+                        {isToActivate ? 'Base' : 'Stub'} plugin address.
                     </div>
                     <button
                         disabled={isLoading}
                         onClick={handleConfirm}
-                        className="flex items-center justify-center mt-2 py-2 px-4 w-full bg-red-500 text-white font-bold rounded-xl disabled:bg-red-400 hover:bg-red-400"
+                        className={`flex items-center justify-center mt-2 py-2 px-4 w-full text-white font-bold rounded-xl '
+                            ${
+                                isToActivate
+                                    ? 'bg-green-600 disabled:bg-green-400 hover:bg-green-400'
+                                    : 'bg-red-500 disabled:bg-red-400 hover:bg-red-400'
+                            }`}
                     >
                         {isLoading ? <Loader /> : 'Confirm'}
                     </button>
@@ -66,4 +75,4 @@ const DeactivatePoolModal = ({
     );
 };
 
-export default DeactivatePoolModal;
+export default PoolActivationModal;

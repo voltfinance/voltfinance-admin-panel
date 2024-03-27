@@ -1,11 +1,11 @@
 import DataWithCopyButton from '@/components/common/DataWithCopyButton';
-import DeactivatePoolModal from '@/components/modals/pool/DeactivatePoolModal';
 import ManagePoolSettingsModal from '@/components/modals/pool/ManagePoolSettingsModal';
-import { ALGEBRA_STUB_PLUGIN } from '@/constants/addresses';
-import { useAlgebraPoolPlugin } from '@/generated';
+import { ALGEBRA_STUB_PLUGIN, PLUGIN_FACTORY } from '@/constants/addresses';
+import { pluginFactoryABI, useAlgebraPoolPlugin } from '@/generated';
 import { usePluginFlags } from '@/hooks/pools/usePluginFlags';
 import { usePool } from '@/hooks/pools/usePool';
-import { Address } from 'wagmi';
+import { Address, useContractRead } from 'wagmi';
+import PoolActivationModal from '@/components/modals/pool/PoolActivationModal';
 
 interface IPoolSettings {
     poolId: Address;
@@ -18,7 +18,14 @@ const PoolSettings = ({ poolId }: IPoolSettings) => {
         address: poolId,
     });
 
-    const isPluginStub = pluginId === ALGEBRA_STUB_PLUGIN;
+    const { data: basePluginId } = useContractRead({
+        address: PLUGIN_FACTORY,
+        abi: pluginFactoryABI,
+        functionName: 'pluginByPool',
+        args: [poolId],
+    });
+
+    const isToActivate = pluginId === ALGEBRA_STUB_PLUGIN;
 
     const isDynamicFeeDisabled =
         flags?.DYNAMIC_FEE_FLAG === 1 && flags?.BEFORE_SWAP_FLAG === 1;
@@ -40,7 +47,7 @@ const PoolSettings = ({ poolId }: IPoolSettings) => {
                 <p className="font-semibold text-sm">Pool address</p>
                 <DataWithCopyButton data={poolId} />
             </div>
-            {isPluginStub && (
+            {isToActivate && (
                 <>
                     <div>
                         <p className="font-semibold text-sm">Swap status</p>
@@ -111,15 +118,28 @@ const PoolSettings = ({ poolId }: IPoolSettings) => {
                     </button>
                 </ManagePoolSettingsModal>
             </div>
-            {!isPluginStub && (
-                <DeactivatePoolModal
+            {isToActivate && basePluginId ? (
+                <PoolActivationModal
+                    isToActivate={isToActivate}
+                    pluginId={basePluginId}
+                    poolId={poolId}
+                    title={`Activate Pool ${pool?.token0.symbol} / ${pool?.token1.symbol}`}
+                >
+                    <button className="flex justify-center w-full py-2 px-4 border border-green-500 text-green-600 font-bold rounded-xl hover:bg-green-600 hover:text-white">
+                        Activate Pool
+                    </button>
+                </PoolActivationModal>
+            ) : (
+                <PoolActivationModal
+                    isToActivate={isToActivate}
+                    pluginId={ALGEBRA_STUB_PLUGIN}
                     poolId={poolId}
                     title={`Deactivate Pool ${pool?.token0.symbol} / ${pool?.token1.symbol}`}
                 >
                     <button className="flex justify-center w-full py-2 px-4 border border-red-200 text-red-500 font-bold rounded-xl hover:bg-red-500 hover:text-white">
-                        Deactivate
+                        Deactivate Pool
                     </button>
-                </DeactivatePoolModal>
+                </PoolActivationModal>
             )}
         </div>
     );
