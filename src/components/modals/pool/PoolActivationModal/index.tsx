@@ -8,7 +8,6 @@ import {
     CredenzaTitle,
     CredenzaTrigger,
 } from '@/components/ui/credenza';
-import { ALGEBRA_STUB_PLUGIN } from '@/constants/addresses';
 import { usePrepareAlgebraPoolSetPlugin } from '@/generated';
 import { useTransitionAwait } from '@/hooks/common/useTransactionAwait';
 import { Address, useContractWrite } from 'wagmi';

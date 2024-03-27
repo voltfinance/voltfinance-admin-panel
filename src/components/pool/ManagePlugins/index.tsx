@@ -3,7 +3,9 @@ import Loader from '@/components/common/Loader';
 import SetPluginAddressModal from '@/components/modals/pool/ChangePluginAddressModal';
 import ManagePluginConfigModal from '@/components/modals/pool/ManagePluginConfigModal';
 import { Switch } from '@/components/ui/switch';
+import { ALGEBRA_STUB_PLUGIN } from '@/constants/addresses';
 import {
+    useAlgebraBasePluginDefaultPluginConfig,
     useAlgebraPoolPlugin,
     usePrepareAlgebraPoolSetPluginConfig,
 } from '@/generated';
@@ -25,6 +27,21 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
     const { data: pluginId } = useAlgebraPoolPlugin({
         address: poolId,
     });
+
+    const isToActivate = pluginId === ALGEBRA_STUB_PLUGIN;
+
+    const isSwapDisabled =
+        flags?.AFTER_SWAP_FLAG === 1 || flags?.BEFORE_SWAP_FLAG === 1;
+
+    const isMintBurnDisabled = flags?.BEFORE_POSITION_MODIFY_FLAG === 1;
+
+    const isFlashesDisabled =
+        flags?.AFTER_FLASH_FLAG === 1 || flags?.BEFORE_FLASH_FLAG === 1;
+
+    const { data: defaultPluginConfig } =
+        useAlgebraBasePluginDefaultPluginConfig({
+            address: pluginId,
+        });
 
     const { config: preparedPluginConfig } =
         usePrepareAlgebraPoolSetPluginConfig({
@@ -73,61 +90,118 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
                         </p>
                         <DataWithCopyButton data={pluginId} />
                     </div>
-                    <div>
-                        <p className="font-semibold text-sm">
-                            Plugin Config (uint8)
-                        </p>
-                        <p>{pluginConfig}</p>
+                    <div className="flex justify-between ">
+                        <div>
+                            <p className="font-semibold text-sm">
+                                Pool Plugin Config (uint8)
+                            </p>
+                            <p>{pluginConfig}</p>
+                        </div>
+                        <div>
+                            <p className="font-semibold text-sm">
+                                Default Plugin Config (uint8)
+                            </p>
+                            <p>{defaultPluginConfig}</p>
+                        </div>
                     </div>
                     <hr />
-                    <div className="flex items-center justify-between">
-                        <label htmlFor="farmingsPlugin">
-                            <p className="font-semibold text-sm">
-                                On-chain farmings Setup
-                            </p>
-                            <p>AFTER_SWAP_FLAG = {flags.AFTER_SWAP_FLAG}</p>
-                        </label>
-                        <Switch
-                            id="farmingsPlugin"
-                            checked={Boolean(flags.AFTER_SWAP_FLAG)}
-                            onCheckedChange={() =>
-                                handleCheckFlag('AFTER_SWAP_FLAG')
-                            }
-                        />
-                    </div>
-                    <div className="flex items-center justify-between">
-                        <label htmlFor="oraclePlugin">
-                            <p className="font-semibold text-sm">
-                                TWAP Oracle Setup
-                            </p>
-                            <p>BEFORE_SWAP_FLAG = {flags.BEFORE_SWAP_FLAG}</p>
-                        </label>
-                        <Switch
-                            id="oraclePlugin"
-                            checked={Boolean(flags.BEFORE_SWAP_FLAG)}
-                            onCheckedChange={() =>
-                                handleCheckFlag('BEFORE_SWAP_FLAG')
-                            }
-                        />
-                    </div>
-                    <div className="flex items-center justify-between">
-                        <label htmlFor="dynamicFeePlugin">
-                            <p className="font-semibold text-sm">
-                                Dynamic Fees Setup
-                            </p>
-                            <p>BEFORE_SWAP_FLAG = {flags.BEFORE_SWAP_FLAG}</p>
-                            <p>DYNAMIC_FEE = {flags.DYNAMIC_FEE_FLAG}</p>
-                        </label>
-                        <Switch
-                            id="dynamicFeePlugin"
-                            checked={Boolean(
-                                flags.DYNAMIC_FEE_FLAG && flags.BEFORE_SWAP_FLAG
-                            )}
-                            onCheckedChange={() => {
-                                handleCheckFlag('DYNAMIC_FEE_FLAG');
-                            }}
-                        />
-                    </div>
+                    {!isToActivate ? (
+                        <>
+                            <div className="flex items-center justify-between">
+                                <label htmlFor="farmingsPlugin">
+                                    <p className="font-semibold text-sm">
+                                        On-chain farmings Setup
+                                    </p>
+                                    <p>
+                                        AFTER_SWAP_FLAG ={' '}
+                                        {flags.AFTER_SWAP_FLAG}
+                                    </p>
+                                </label>
+                                <Switch
+                                    id="farmingsPlugin"
+                                    checked={Boolean(flags.AFTER_SWAP_FLAG)}
+                                    onCheckedChange={() =>
+                                        handleCheckFlag('AFTER_SWAP_FLAG')
+                                    }
+                                />
+                            </div>
+                            <div className="flex items-center justify-between">
+                                <label htmlFor="oraclePlugin">
+                                    <p className="font-semibold text-sm">
+                                        TWAP Oracle Setup
+                                    </p>
+                                    <p>
+                                        BEFORE_SWAP_FLAG ={' '}
+                                        {flags.BEFORE_SWAP_FLAG}
+                                    </p>
+                                </label>
+                                <Switch
+                                    id="oraclePlugin"
+                                    checked={Boolean(flags.BEFORE_SWAP_FLAG)}
+                                    onCheckedChange={() =>
+                                        handleCheckFlag('BEFORE_SWAP_FLAG')
+                                    }
+                                />
+                            </div>
+                            <div className="flex items-center justify-between">
+                                <label htmlFor="dynamicFeePlugin">
+                                    <p className="font-semibold text-sm">
+                                        Dynamic Fees Setup
+                                    </p>
+                                    <p>
+                                        BEFORE_SWAP_FLAG ={' '}
+                                        {flags.BEFORE_SWAP_FLAG}
+                                    </p>
+                                    <p>
+                                        DYNAMIC_FEE = {flags.DYNAMIC_FEE_FLAG}
+                                    </p>
+                                </label>
+                                <Switch
+                                    id="dynamicFeePlugin"
+                                    checked={Boolean(
+                                        flags.DYNAMIC_FEE_FLAG &&
+                                            flags.BEFORE_SWAP_FLAG
+                                    )}
+                                    onCheckedChange={() => {
+                                        handleCheckFlag('DYNAMIC_FEE_FLAG');
+                                    }}
+                                />
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            <div>
+                                <p className="font-semibold text-sm">
+                                    Swap status
+                                </p>
+                                {isSwapDisabled ? (
+                                    <p className="text-red-600">Disabled</p>
+                                ) : (
+                                    <p className="text-green-600">Enabled</p>
+                                )}
+                            </div>
+                            <div>
+                                <p className="font-semibold text-sm">
+                                    Mint / Burn status
+                                </p>
+                                {isMintBurnDisabled ? (
+                                    <p className="text-red-600">Disabled</p>
+                                ) : (
+                                    <p className="text-green-600">Enabled</p>
+                                )}
+                            </div>
+                            <div>
+                                <p className="font-semibold text-sm">
+                                    Flash status
+                                </p>
+                                {isFlashesDisabled ? (
+                                    <p className="text-red-600">Disabled</p>
+                                ) : (
+                                    <p className="text-green-600">Enabled</p>
+                                )}
+                            </div>
+                        </>
+                    )}
                     <button
                         disabled={isLoading}
                         onClick={handleConfirm}

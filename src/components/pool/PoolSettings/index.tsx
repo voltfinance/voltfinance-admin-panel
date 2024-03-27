@@ -30,14 +30,6 @@ const PoolSettings = ({ poolId }: IPoolSettings) => {
     const isDynamicFeeDisabled =
         flags?.DYNAMIC_FEE_FLAG === 1 && flags?.BEFORE_SWAP_FLAG === 1;
 
-    const isSwapDisabled =
-        flags?.AFTER_SWAP_FLAG === 1 || flags?.BEFORE_SWAP_FLAG === 1;
-
-    const isMintBurnDisabled = flags?.BEFORE_POSITION_MODIFY_FLAG === 1;
-
-    const isFlashesDisabled =
-        flags?.AFTER_FLASH_FLAG === 1 || flags?.BEFORE_FLASH_FLAG === 1;
-
     const [, pool] = usePool(poolId);
 
     return (
@@ -47,36 +39,14 @@ const PoolSettings = ({ poolId }: IPoolSettings) => {
                 <p className="font-semibold text-sm">Pool address</p>
                 <DataWithCopyButton data={poolId} />
             </div>
-            {isToActivate && (
-                <>
-                    <div>
-                        <p className="font-semibold text-sm">Swap status</p>
-                        {isSwapDisabled ? (
-                            <p className="text-red-600">Disabled</p>
-                        ) : (
-                            <p className="text-green-600">Enabled</p>
-                        )}
-                    </div>
-                    <div>
-                        <p className="font-semibold text-sm">
-                            Mint / Burn status
-                        </p>
-                        {isMintBurnDisabled ? (
-                            <p className="text-red-600">Disabled</p>
-                        ) : (
-                            <p className="text-green-600">Enabled</p>
-                        )}
-                    </div>
-                    <div>
-                        <p className="font-semibold text-sm">Flash status</p>
-                        {isFlashesDisabled ? (
-                            <p className="text-red-600">Disabled</p>
-                        ) : (
-                            <p className="text-green-600">Enabled</p>
-                        )}
-                    </div>
-                </>
-            )}
+            <div>
+                <p className="font-semibold text-sm">Base plugin address</p>
+                <DataWithCopyButton data={basePluginId || ''} />
+            </div>
+            <div>
+                <p className="font-semibold text-sm">Stub plugin address</p>
+                <DataWithCopyButton data={ALGEBRA_STUB_PLUGIN} />
+            </div>
             <div className="flex gap-4 mt-auto">
                 <ManagePoolSettingsModal
                     poolId={poolId}
