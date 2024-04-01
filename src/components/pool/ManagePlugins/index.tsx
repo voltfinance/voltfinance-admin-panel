@@ -13,7 +13,7 @@ import { useTransitionAwait } from '@/hooks/common/useTransactionAwait';
 import { usePluginConfig } from '@/hooks/pools/usePluginConfig';
 import { usePluginFlags } from '@/hooks/pools/usePluginFlags';
 import { PluginFlags } from '@/types/pool-plugin-flags';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Address, useContractWrite } from 'wagmi';
 interface IManagePlugins {
     poolId: Address;
@@ -21,7 +21,7 @@ interface IManagePlugins {
 
 const ManagePlugins = ({ poolId }: IManagePlugins) => {
     const pluginFlags = usePluginFlags(poolId);
-    const [flags, setFlags] = useState<PluginFlags | null>(pluginFlags);
+    const [flags, setFlags] = useState<PluginFlags | null>(null);
     const pluginConfig = usePluginConfig(flags);
 
     const { data: pluginId } = useAlgebraPoolPlugin({
@@ -57,6 +57,10 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
         'Set Plugin'
     );
 
+    useEffect(() => {
+        setFlags(pluginFlags);
+    }, [pluginFlags]);
+
     const handleCheckFlag = (flag: keyof PluginFlags) => {
         if (!flags) return;
         setFlags((prev) => {
@@ -82,7 +86,7 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
     return (
         <div className="flex flex-col gap-4 text-left p-4 border rounded-xl">
             <div className="font-bold">Manage Plugins</div>
-            {pluginId && flags && (
+            {pluginId && flags ? (
                 <div className="flex flex-col gap-4">
                     <div>
                         <p className="font-semibold text-sm">
@@ -97,12 +101,14 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
                             </p>
                             <p>{pluginConfig}</p>
                         </div>
-                        <div>
-                            <p className="font-semibold text-sm">
-                                Default Plugin Config (uint8)
-                            </p>
-                            <p>{defaultPluginConfig}</p>
-                        </div>
+                        {defaultPluginConfig ? (
+                            <div>
+                                <p className="font-semibold text-sm">
+                                    Default Plugin Config (uint8)
+                                </p>
+                                <p>{defaultPluginConfig}</p>
+                            </div>
+                        ) : null}
                     </div>
                     <hr />
                     {!isToActivate ? (
@@ -210,6 +216,8 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
                         {isLoading ? <Loader /> : 'Confirm'}
                     </button>
                 </div>
+            ) : (
+                <p>Loading...</p>
             )}
 
             {flags && pluginId && pluginConfig !== undefined && (
