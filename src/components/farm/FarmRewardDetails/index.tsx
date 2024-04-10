@@ -81,8 +81,6 @@ const FarmRewardDetails = ({
         return;
     }, [rewardLeftForSpan, rate, reward]);
 
-    console.log(rewardRates);
-
     return (
         <div className="text-left p-4 border rounded-xl">
             <div className="flex items-center justify-between mb-4">

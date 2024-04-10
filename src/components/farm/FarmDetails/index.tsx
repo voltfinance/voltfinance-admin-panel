@@ -1,4 +1,5 @@
 import Loader from "@/components/common/Loader";
+import ManageWeightsModal from "@/components/modals/ManageWeightsModal.tsx";
 import { Switch } from "@/components/ui/switch";
 import { ALGEBRA_ETERNAL_FARMING } from "@/constants/addresses";
 import { eternalFarmingABI, useAlgebraVirtualPoolDynamicRateActivated, usePrepareEternalFarmingSwitchDynamicRate } from "@/generated";
@@ -79,6 +80,14 @@ const FarmDetails = ({ id, incentiveKey, isDeactivated, virtualPool }: IFarmDeta
                 </div>
                 {isLoadingDynamicRate ? <Loader color="black" /> : <Switch checked={isDynamicRateActivated} onCheckedChange={handleSwitchDynamicRate} />}
             </div>
+            {!isDeactivated && <ManageWeightsModal title="Manage Weights" incentiveKey={incentiveKey}>
+                <button 
+                disabled={isLoading || !write} 
+                className="flex justify-center w-full py-2 px-4 font-bold rounded-xl bg-blue-500 text-white hover:bg-blue-400"
+                >
+                    Manage Weights
+                </button>
+            </ManageWeightsModal>}
         </div>
         <div className="w-full mt-auto">
             { !isDeactivated && <button disabled={isLoading || !write} onClick={() => write && write()} className="flex justify-center w-full py-2 px-4 border border-red-200 text-red-500 font-bold rounded-xl hover:bg-red-500 hover:text-white">
