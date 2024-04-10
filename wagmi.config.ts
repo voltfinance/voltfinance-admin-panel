@@ -1,3 +1,4 @@
+import { algebraVirtualPoolABI } from './src/abis/algebraVirtualPool';
 import { algebraStubPluginABI } from './src/abis/algebraStubPlugin';
 import { ContractConfig, defineConfig } from '@wagmi/cli';
 import { actions, react } from '@wagmi/cli/plugins';
@@ -51,6 +52,10 @@ const contracts: ContractConfig[] = [
         abi: algebraStubPluginABI,
         address: ALGEBRA_STUB_PLUGIN,
     },
+    {
+        name: 'AlgebraVirtualPool',
+        abi: algebraVirtualPoolABI,
+    }
 ];
 
 export default defineConfig({
