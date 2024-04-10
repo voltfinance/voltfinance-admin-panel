@@ -24,9 +24,9 @@ const FarmPage = () => {
         pollInterval: 5000
     })
 
-    const { token0, token1, pool, reward, rewardRate, rewardToken, bonusReward, bonusRewardRate, bonusRewardToken, nonce, rewardRates, isDeactivated } = useFarmData(singleFarming?.eternalFarming)
+    const { token0, token1, pool, virtualPool, reward, rewardRate, rewardToken, bonusReward, bonusRewardRate, bonusRewardToken, nonce, rewardRates, isDeactivated, isDynamicRateActivated } = useFarmData(singleFarming?.eternalFarming)
 
-    const isPoolReady = token0 && token1 && pool
+    const isPoolReady = token0 && token1 && pool && isDynamicRateActivated !== undefined
 
     const incentiveKey: PartialIncentiveKey = {
         rewardToken: rewardToken ? rewardToken.address as Address : ADDRESS_ZERO,
@@ -47,7 +47,7 @@ const FarmPage = () => {
             { rewardToken && reward ? <FarmRewardDetails token={rewardToken} rate={rewardRate} reward={reward} incentiveKey={incentiveKey} rewardRates={rewardRates} isDeactivated={isDeactivated} /> : <div className="flex items-center justify-center w-full border rounded-xl">Farm doesn't have first reward</div> }
             { bonusRewardToken && bonusReward ? <FarmRewardDetails token={bonusRewardToken} rate={bonusRewardRate} reward={bonusReward} incentiveKey={incentiveKey} rewardRates={rewardRates} isBonus isDeactivated={isDeactivated} /> : <div className="flex items-center justify-center w-full border rounded-xl">Farm doesn't have second reward</div> }
             { isPoolReady ? <FarmPoolDetails name={`${token0.symbol} / ${token1.symbol}`} id={pool} /> : <div></div> }
-            { farm && isPoolReady ? <FarmDetails id={farm} incentiveKey={incentiveKey as IncentiveKey} isDeactivated={isDeactivated} /> : null }
+            { farm && isPoolReady ? <FarmDetails id={farm} incentiveKey={incentiveKey as IncentiveKey} isDeactivated={isDeactivated} virtualPool={virtualPool} /> : null }
         </div>
     </PageContainer>
 
