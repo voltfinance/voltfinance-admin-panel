@@ -40,8 +40,7 @@ export function useFarmData (farm: FarmingFieldsFragment | null | undefined) {
         address: virtualPool,
     })
 
-    const rewardRate = rates ? rates[0] : 0n;
-    const bonusRewardRate = rates ? rates[1] : 0n;
+    const [rewardRate, bonusRewardRate] = rates || [0n, 0n];
 
     const formattedReward = _rewardToken ? Number(formatUnits(BigInt(reward), _rewardToken.decimals)).toFixed(3) : undefined
     const formattedBonusReward = _bonusRewardToken ? Number(formatUnits(BigInt(bonusReward), _bonusRewardToken.decimals)).toFixed(3) : undefined
