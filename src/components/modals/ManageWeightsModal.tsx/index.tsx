@@ -2,10 +2,9 @@ import Loader from "@/components/common/Loader";
 import { Credenza, CredenzaBody, CredenzaContent, CredenzaHeader, CredenzaTitle, CredenzaTrigger } from "@/components/ui/credenza"
 import { Input } from "@/components/ui/input";
 import { usePrepareEternalFarmingSetWeights } from "@/generated";
-import { useCurrency } from "@/hooks/common/useCurrency";
 import { useTransitionAwait } from "@/hooks/common/useTransactionAwait";
+import { usePool } from "@/hooks/pools/usePool";
 import { IncentiveKey } from "@/types/incentive-key";
-import { ADDRESS_ZERO } from "@cryptoalgebra/integral-sdk";
 import { useState } from "react";
 import { useContractWrite } from "wagmi";
 
@@ -20,8 +19,10 @@ const ManageWeightsModal = ({ title,  incentiveKey, children }: IManageWeightsMo
     const [weight0, setWeight0] = useState<number>(0)
     const [weight1, setWeight1] = useState<number>(0)
 
-    const token0Symbol = useCurrency(incentiveKey.rewardToken)?.symbol
-    const token1Symbol = useCurrency(incentiveKey.bonusRewardToken)?.symbol
+    const [,pool] = usePool(incentiveKey.pool);
+
+    const token0Symbol = pool?.token0.symbol;
+    const token1Symbol = pool?.token1.symbol;
 
     const { config } = usePrepareEternalFarmingSetWeights({
         args: [incentiveKey, weight0 * 10, weight1 * 10],
@@ -40,7 +41,7 @@ const ManageWeightsModal = ({ title,  incentiveKey, children }: IManageWeightsMo
                 <CredenzaBody className={'flex flex-col gap-2'}>
                     <div className="flex justify-between items-center gap-2">
                         <label className="w-full">
-                            <p className="text-sm mb-2">Weight {token0Symbol ? token0Symbol : 'Token 0'}, %</p>
+                            <p className="text-sm mb-2">{token0Symbol ? token0Symbol : 'Token 0'}'s weight, %</p>
                             <Input
                                 id="weight0"
                                 placeholder="Enter weight0, %"
@@ -64,7 +65,7 @@ const ManageWeightsModal = ({ title,  incentiveKey, children }: IManageWeightsMo
                             />
                         </label>
                         <label className="w-full">
-                            <p className="text-sm mb-2">Weight {token1Symbol && incentiveKey.bonusRewardToken !== ADDRESS_ZERO ? token1Symbol : 'Bonus Reward Token'}, %</p>
+                            <p className="text-sm mb-2">{token1Symbol ? token1Symbol : 'Token 1'}'s weight, %, %</p>
                             <Input
                                 id="weight1"
                                 placeholder="Enter weight1, %"
