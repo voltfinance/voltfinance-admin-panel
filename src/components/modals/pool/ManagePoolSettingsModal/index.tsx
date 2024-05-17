@@ -100,9 +100,7 @@ const ManagePoolSettingsModal = ({
     /* Multi values (Dynamic fee) */
     const initialDynamicFee = useBasePluginFeeConfiguration({ poolId });
 
-    const [dynamicFee, setDynamicFee] = useState<FeeConfiguration | undefined>(
-        initialDynamicFee
-    );
+    const [dynamicFee, setDynamicFee] = useState<FeeConfiguration | undefined>();
 
     const { config: dynamicFeeConfig } =
         usePrepareAlgebraBasePluginChangeFeeConfiguration({
@@ -118,6 +116,12 @@ const ManagePoolSettingsModal = ({
         feeHash?.hash,
         title
     );
+
+    useEffect(() => {
+        if (initialDynamicFee) {
+            setDynamicFee(initialDynamicFee);
+        }
+    },[initialDynamicFee])
 
     const handleConfirm = () => {
         if (isDynamicFee) {

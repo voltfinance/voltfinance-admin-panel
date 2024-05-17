@@ -21,6 +21,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 ref={ref}
                 onChange={(e) => {
                     let value = e.target.value.replace(/,/g, '.');
+                    if (value === '.') {
+                        value = '0.';
+                    }
                     value =
                         value.indexOf('.') >= 0
                             ? value.slice(

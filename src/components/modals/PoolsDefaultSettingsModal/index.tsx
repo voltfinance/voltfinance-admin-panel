@@ -1,3 +1,4 @@
+import Loader from '@/components/common/Loader';
 import {
     Credenza,
     CredenzaBody,
@@ -18,7 +19,7 @@ import { useTransitionAwait } from '@/hooks/common/useTransactionAwait';
 import { usePluginFactoryFeeConfiguration } from '@/hooks/pools/useDefaultFeeConfiguration';
 import { cn } from '@/lib/utils';
 import { FeeConfiguration } from '@/types/pool-settings';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useContractWrite } from 'wagmi';
 
 interface IPoolsDefaultSettingsModal {
@@ -38,22 +39,40 @@ interface Settings {
     [SettingsKeys.TICK_SPACING]: number;
 }
 
+const initialFee = {
+    alpha1: 0,
+    alpha2: 0,
+    beta1: 0,
+    beta2: 0,
+    gamma1: 0,
+    gamma2: 0,
+    baseFee: 0,
+};
+
 const PoolsDefaultSettingsModal = ({
     title,
     children,
 }: IPoolsDefaultSettingsModal) => {
+    const [settingsData, setSettingsData] = useState<Settings>({
+        [SettingsKeys.COMMUNITY_FEE]: 0,
+        [SettingsKeys.FEE]: initialFee,
+        [SettingsKeys.TICK_SPACING]: 0,
+    });
+
     const defaultFeeConfiguration = usePluginFactoryFeeConfiguration();
 
-    const { data: defaultCommunityFee } =
-        useAlgebraFactoryDefaultCommunityFee();
+    const { data: defaultCommunityFee } = useAlgebraFactoryDefaultCommunityFee();
 
     const { data: defaultTickSpacing } = useAlgebraFactoryDefaultTickspacing();
 
-    const [settingsData, setSettingsData] = useState<Settings>({
-        [SettingsKeys.COMMUNITY_FEE]: defaultCommunityFee || 0,
-        [SettingsKeys.FEE]: defaultFeeConfiguration,
-        [SettingsKeys.TICK_SPACING]: defaultTickSpacing || 0,
-    });
+    useEffect(() => {
+        if (defaultCommunityFee === undefined || defaultTickSpacing === undefined || !defaultFeeConfiguration) return;
+        setSettingsData({
+            [SettingsKeys.COMMUNITY_FEE]: defaultCommunityFee,
+            [SettingsKeys.FEE]: defaultFeeConfiguration,
+            [SettingsKeys.TICK_SPACING]: defaultTickSpacing,
+        });
+    }, [defaultCommunityFee, defaultTickSpacing, defaultFeeConfiguration ]);
 
     /* Set Default Community Fee */
     const { config: defaultCommunityFeeConfig } =
@@ -99,18 +118,12 @@ const PoolsDefaultSettingsModal = ({
         e.preventDefault();
         switch (key) {
             case SettingsKeys.COMMUNITY_FEE:
-                console.log('Com fee');
-                console.log(settingsData[SettingsKeys.COMMUNITY_FEE]);
                 setDefaultCommunityFee?.();
                 break;
             case SettingsKeys.FEE:
-                console.log('Fee');
-                console.log(settingsData[SettingsKeys.FEE]);
                 setDefaultFeeConfiguration?.();
                 break;
             case SettingsKeys.TICK_SPACING:
-                console.log('Tick Spacing');
-                console.log(settingsData[SettingsKeys.TICK_SPACING]);
                 setDefaultTickSpacing?.();
                 break;
             default:
@@ -200,7 +213,7 @@ const PoolsDefaultSettingsModal = ({
                                         {feeLoading ||
                                         communityFeeLoading ||
                                         tickSpacingLoading
-                                            ? 'Changing...'
+                                            ? <Loader />
                                             : 'Confirm'}
                                     </button>
                                 </label>
