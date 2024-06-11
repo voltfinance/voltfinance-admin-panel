@@ -1,6 +1,6 @@
 import { ContractConfig, defineConfig } from "@wagmi/cli";
 import { actions, react } from '@wagmi/cli/plugins'
-import { algebraFactoryABI, algebraPoolABI, eternalFarmingABI, farmingCenterABI } from './src/abis'
+import { algebraFactoryABI, algebraPoolABI, eternalFarmingABI, farmingCenterABI, algebraVirtualPoolABI} from './src/abis'
 import { ALGEBRA_FARMING_CENTER, ALGEBRA_ETERNAL_FARMING, ALGEBRA_FACTORY } from './src/constants/addresses'
 
 const contracts: ContractConfig[] = [
@@ -22,6 +22,10 @@ const contracts: ContractConfig[] = [
     {
       name: 'AlgebraPool',
       abi: algebraPoolABI
+    },
+    {
+      name: 'AlgebraVirtualPool',
+      abi: algebraVirtualPoolABI,
     }
 ]
 
