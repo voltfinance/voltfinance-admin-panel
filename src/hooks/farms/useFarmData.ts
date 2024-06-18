@@ -1,4 +1,9 @@
-import { useAlgebraPoolToken0, useAlgebraPoolToken1, useAlgebraVirtualPoolRewardRates } from "@/generated";
+import {
+    useAlgebraPoolToken0,
+    useAlgebraPoolToken1,
+    useAlgebraVirtualPoolRewardRates,
+    useAlgebraVirtualPoolRewardReserves
+} from "@/generated";
 import { FarmingFieldsFragment } from "@/graphql/generated/graphql";
 import { ADDRESS_ZERO } from "@cryptoalgebra/integral-sdk";
 import { formatUnits } from "viem";
@@ -6,12 +11,17 @@ import { useToken } from "wagmi";
 
 export function useFarmData (farm: FarmingFieldsFragment | null | undefined) {
 
-    const { pool, rewardToken, bonusRewardToken, reward, bonusReward, nonce, isDeactivated, virtualPool } = farm || {}
+    const { pool, rewardToken, bonusRewardToken, nonce, isDeactivated, virtualPool } = farm || {}
 
     const { data: rates } = useAlgebraVirtualPoolRewardRates({
         address: virtualPool,
     });
 
+    const { data: rewardReserves } = useAlgebraVirtualPoolRewardReserves({
+        address: virtualPool,
+    });
+
+    const [reward, bonusReward] = rewardReserves || [0n, 0n];
     const [rewardRate, bonusRewardRate] = rates || [0n, 0n];
 
     const { data: _token0 } = useAlgebraPoolToken0({
@@ -38,11 +48,11 @@ export function useFarmData (farm: FarmingFieldsFragment | null | undefined) {
         address: bonusRewardToken === ADDRESS_ZERO ? undefined: bonusRewardToken
     })
 
-    const formattedReward = _rewardToken ? Number(formatUnits(BigInt(reward), _rewardToken.decimals)).toFixed(3) : undefined
-    const formattedBonusReward = _bonusRewardToken ? Number(formatUnits(BigInt(bonusReward), _bonusRewardToken.decimals)).toFixed(3) : undefined
+    const formattedReward = _rewardToken ? Number(formatUnits(reward, _rewardToken.decimals)).toFixed(3) : undefined
+    const formattedBonusReward = _bonusRewardToken ? Number(formatUnits(bonusReward, _bonusRewardToken.decimals)).toFixed(3) : undefined
 
-    const formattedRewardRate = _rewardToken ? Number(formatUnits(BigInt(rewardRate), _rewardToken.decimals)) : undefined
-    const formattedBonusRewardRate = _bonusRewardToken ? Number(formatUnits(BigInt(bonusRewardRate), _bonusRewardToken.decimals)) : undefined
+    const formattedRewardRate = _rewardToken ? Number(formatUnits(rewardRate, _rewardToken.decimals)) : undefined
+    const formattedBonusRewardRate = _bonusRewardToken ? Number(formatUnits(bonusRewardRate, _bonusRewardToken.decimals)) : undefined
 
     const rewardRates: [ { value: bigint, decimals: number }, { value: bigint, decimals: number } ] = [{value: BigInt(rewardRate || 0), decimals: _rewardToken?.decimals || 0 }, { value: BigInt(bonusRewardRate || 0), decimals: _bonusRewardToken?.decimals || 0 }]
 
