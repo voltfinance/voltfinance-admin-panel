@@ -1,4 +1,4 @@
-import ManageRewardsModal from "@/components/modals/ManageRewardsModal";
+import ManageRewardsModal from "@/components/modals/farm/ManageRewardsModal";
 import { cn } from "@/lib/utils";
 import { IncentiveKey, PartialIncentiveKey } from "@/types/incentive-key";
 import { useMemo, useState } from "react";

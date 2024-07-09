@@ -58,7 +58,7 @@ const CreateFarmButton = ({
                 rewardToken,
                 bonusRewardToken: bonusRewardToken || '0x0000000000000000000000000000000000000000',
                 pool,
-                nonce: BigInt(nonce)
+                nonce,
             },
             {
                 reward: rewardBn,

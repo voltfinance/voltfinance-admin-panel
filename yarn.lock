@@ -570,9 +570,9 @@
     util "^0.12.4"
 
 "@cryptoalgebra/integral-sdk@^0.11.11":
-  version "0.11.11"
-  resolved "https://registry.yarnpkg.com/@cryptoalgebra/integral-sdk/-/integral-sdk-0.11.11.tgz#662498b5da77d23a95431ba76cdf0ea09e3e7281"
-  integrity sha512-brGTn2eqyRaY+pW2Dlht8wX13zAd0U4pS74AnBuhmFEQOrAzR2cRhYm/b1zQBU4FdKPPekOCfR3ijF/3iUXpJw==
+  version "0.11.22"
+  resolved "https://registry.yarnpkg.com/@cryptoalgebra/integral-sdk/-/integral-sdk-0.11.22.tgz#01b367f05461b279a8bd7d26207ddc05f96b8549"
+  integrity sha512-JHI3QVX/ybYDaegawhnKS83awWBmMLsp/GqIiMLJkX5XKeyix/bYyt1s86Tui7QC7bLbZPUJb+xCJ7t+DxYmqA==
   dependencies:
     "@ethersproject/abi" "^5.7.0"
     "@ethersproject/address" "^5.7.0"
@@ -7530,7 +7530,14 @@ string_decoder@^1.1.1:
   dependencies:
     safe-buffer "~5.2.0"
 
-"strip-ansi-cjs@npm:strip-ansi@^6.0.1", strip-ansi@^6.0.0, strip-ansi@^6.0.1:
+"strip-ansi-cjs@npm:strip-ansi@^6.0.1":
+  version "6.0.1"
+  resolved "https://registry.npmjs.org/strip-ansi/-/strip-ansi-6.0.1.tgz"
+  integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
+  dependencies:
+    ansi-regex "^5.0.1"
+
+strip-ansi@^6.0.0, strip-ansi@^6.0.1:
   version "6.0.1"
   resolved "https://registry.npmjs.org/strip-ansi/-/strip-ansi-6.0.1.tgz"
   integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
