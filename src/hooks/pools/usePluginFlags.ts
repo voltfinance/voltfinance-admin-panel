@@ -3,13 +3,13 @@ import { PluginFlags } from '@/types/pool-plugin-flags';
 import { useMemo } from 'react';
 import { Address } from 'wagmi';
 
-export function usePluginFlags(poolId: Address): PluginFlags | null {
+export function usePluginFlags(poolId: Address): PluginFlags | undefined {
     const { data: globalState, isLoading } = useAlgebraPoolGlobalState({
         address: poolId,
     });
 
     return useMemo(() => {
-        if (!globalState || isLoading) return null;
+        if (!globalState || isLoading) return;
 
         const tempPluginConfig = globalState[3];
 

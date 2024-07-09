@@ -22,9 +22,12 @@ interface IManagePlugins {
 
 const ManagePlugins = ({ poolId }: IManagePlugins) => {
     const pluginFlags = usePluginFlags(poolId);
-    const [flags, setFlags] = useState<PluginFlags | null>(null);
+    const [flags, setFlags] = useState<PluginFlags>();
 
-    const pluginConfig = useMemo(() => flags && parsePluginFlags(flags), [flags]);
+    const pluginConfig = useMemo(() => {
+        if (!flags) return;
+        return parsePluginFlags(flags)
+    }, [flags]);
 
     const { data: pluginId } = useAlgebraPoolPlugin({
         address: poolId,
@@ -48,7 +51,8 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
     const { config: preparedPluginConfig } =
         usePrepareAlgebraPoolSetPluginConfig({
             address: poolId,
-            args: [pluginConfig],
+            args: [pluginConfig as number],
+            enabled: pluginConfig !== undefined,
         });
 
     const { data: setPluginConfigHash, write } =
@@ -60,13 +64,14 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
     );
 
     useEffect(() => {
+        if (!pluginFlags) return;
         setFlags(pluginFlags);
     }, [pluginFlags]);
 
     const handleCheckFlag = (flag: keyof PluginFlags) => {
         if (!flags) return;
         setFlags((prev) => {
-            if (!prev) return null;
+            if (!prev) return;
             const updatedFlags = { ...prev };
 
             if (flag === 'DYNAMIC_FEE_FLAG') {

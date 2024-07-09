@@ -1,5 +1,3 @@
-import { algebraVirtualPoolABI } from './src/abis/algebraVirtualPool';
-import { algebraStubPluginABI } from './src/abis/algebraStubPlugin';
 import { ContractConfig, defineConfig } from '@wagmi/cli';
 import { actions, react } from '@wagmi/cli/plugins';
 import {
@@ -9,6 +7,8 @@ import {
     eternalFarmingABI,
     farmingCenterABI,
     pluginFactoryABI,
+    algebraStubPluginABI,
+    algebraVirtualPoolABI,
 } from './src/abis';
 import {
     ALGEBRA_FARMING_CENTER,

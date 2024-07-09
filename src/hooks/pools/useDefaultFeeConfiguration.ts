@@ -8,7 +8,7 @@ import { useMemo } from 'react';
 import { Address } from 'wagmi';
 
 
-export function usePluginFactoryFeeConfiguration(): FeeConfiguration {
+export function usePluginFactoryFeeConfiguration(): FeeConfiguration | undefined {
     const { data: defaultFeeConfiguration } =
         usePluginFactoryDefaultFeeConfiguration();
 
