@@ -3,14 +3,27 @@ import {
     useAlgebraPoolToken1,
     useAlgebraVirtualPoolDynamicRateActivated,
     useAlgebraVirtualPoolRewardRates,
+    useAlgebraVirtualPoolRewardReserves
 } from "@/generated";
 import { FarmingFieldsFragment } from "@/graphql/generated/graphql";
 import { ADDRESS_ZERO } from "@cryptoalgebra/integral-sdk";
 import { formatUnits } from "viem";
 import { useToken } from "wagmi";
 
-export function useFarmData(farm: FarmingFieldsFragment | null | undefined) {
-    const { pool, rewardToken, bonusRewardToken, reward, bonusReward, nonce, isDeactivated, virtualPool } = farm || {};
+export function useFarmData (farm: FarmingFieldsFragment | null | undefined) {
+
+    const { pool, rewardToken, bonusRewardToken, nonce, isDeactivated, virtualPool } = farm || {}
+
+    const { data: rates } = useAlgebraVirtualPoolRewardRates({
+        address: virtualPool,
+    });
+
+    const { data: rewardReserves } = useAlgebraVirtualPoolRewardReserves({
+        address: virtualPool,
+    });
+
+    const [reward, bonusReward] = rewardReserves || [0n, 0n];
+    const [rewardRate, bonusRewardRate] = rates || [0n, 0n];
 
     const { data: _token0 } = useAlgebraPoolToken0({
         address: pool,
@@ -39,12 +52,6 @@ export function useFarmData(farm: FarmingFieldsFragment | null | undefined) {
     const { data: isDynamicRateActivated } = useAlgebraVirtualPoolDynamicRateActivated({
         address: virtualPool,
     });
-
-    const { data: rates } = useAlgebraVirtualPoolRewardRates({
-        address: virtualPool,
-    });
-
-    const [rewardRate, bonusRewardRate] = rates || [0n, 0n];
 
     const formattedReward = _rewardToken ? Number(formatUnits(BigInt(reward), _rewardToken.decimals)).toFixed(3) : undefined;
     const formattedBonusReward = _bonusRewardToken

@@ -63,7 +63,6 @@ const FarmList = () => {
 
     const { data: farms, loading } = useAllFarmsQuery({
         client: farmsClient,
-        pollInterval: 50000
     })
 
     const { activeFarms, deactivatedFarms } = useMemo(() => {
@@ -102,13 +101,13 @@ const FarmList = () => {
             <div className="text-lg font-semibold mb-4">Active Farms</div>
             <FarmHeader />
             <div className="grid grid-cols-1 gap-4">
-                { activeFarms.map(farm => <FarmRow {...farm} />) }
+                { activeFarms.map(farm => <FarmRow key={farm.id} {...farm} />) }
             </div>
             {
                 showDeactivated ? <>
                     <div className="text-lg font-semibold my-4">Deactivated Farms</div>
                     <div className="grid grid-cols-1 gap-4">
-                        { deactivatedFarms.map(farm => <FarmRow {...farm} />) }
+                        { deactivatedFarms.map(farm => <FarmRow key={farm.id} {...farm} />) }
                     </div>
                 </>
                 : null

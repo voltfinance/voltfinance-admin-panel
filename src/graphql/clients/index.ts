@@ -6,6 +6,6 @@ export const infoClient = new ApolloClient({
 });
 
 export const farmsClient = new ApolloClient({
-    uri: import.meta.env.VITE_FARMS_GRAPH,
+    uri: import.meta.env.VITE_FARMING_GRAPH,
     cache: new InMemoryCache()
 })

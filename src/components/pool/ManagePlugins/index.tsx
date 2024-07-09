@@ -10,10 +10,11 @@ import {
     usePrepareAlgebraPoolSetPluginConfig,
 } from '@/generated';
 import { useTransitionAwait } from '@/hooks/common/useTransactionAwait';
-import { usePluginConfig } from '@/hooks/pools/usePluginConfig';
 import { usePluginFlags } from '@/hooks/pools/usePluginFlags';
 import { PluginFlags } from '@/types/pool-plugin-flags';
-import { useEffect, useState } from 'react';
+import { parsePluginConfig } from '@/utils/pool/parsePluginConfig';
+import { parsePluginFlags } from '@/utils/pool/parsePluginFlags';
+import { useEffect, useMemo, useState } from 'react';
 import { Address, useContractWrite } from 'wagmi';
 interface IManagePlugins {
     poolId: Address;
@@ -22,7 +23,8 @@ interface IManagePlugins {
 const ManagePlugins = ({ poolId }: IManagePlugins) => {
     const pluginFlags = usePluginFlags(poolId);
     const [flags, setFlags] = useState<PluginFlags | null>(null);
-    const pluginConfig = usePluginConfig(flags);
+
+    const pluginConfig = useMemo(() => flags && parsePluginFlags(flags), [flags]);
 
     const { data: pluginId } = useAlgebraPoolPlugin({
         address: poolId,
@@ -83,6 +85,11 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
         write?.();
     };
 
+    const handleResetPluginConfig = () => {
+        if (defaultPluginConfig === undefined) return;
+        setFlags(parsePluginConfig(defaultPluginConfig));
+    };
+
     return (
         <div className="flex flex-col gap-4 text-left p-4 border rounded-xl">
             <div className="font-bold">Manage Plugins</div>
@@ -99,7 +106,15 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
                             <p className="font-semibold text-sm">
                                 Pool Plugin Config (uint8)
                             </p>
-                            <p>{pluginConfig}</p>
+                            <div className='flex justify-between items-center'>
+                                <p>{pluginConfig}</p>
+                                {defaultPluginConfig !== pluginConfig && <button 
+                                    onClick={handleResetPluginConfig}
+                                    className='flex items-center justify-center border px-2 rounded-lg hover:bg-slate-100'
+                                >
+                                    reset
+                                </button>}
+                            </div>
                         </div>
                         {defaultPluginConfig ? (
                             <div>
@@ -173,6 +188,13 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
                                     }}
                                 />
                             </div>
+                            <button
+                                disabled={isLoading}
+                                onClick={handleConfirm}
+                                className="flex items-center justify-center py-2 px-4 w-full mt-auto bg-blue-500 text-white font-bold rounded-xl disabled:bg-blue-400 hover:bg-blue-400"
+                            >
+                                {isLoading ? <Loader /> : 'Confirm'}
+                            </button>
                         </>
                     ) : (
                         <>
@@ -208,13 +230,6 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
                             </div>
                         </>
                     )}
-                    <button
-                        disabled={isLoading}
-                        onClick={handleConfirm}
-                        className="flex items-center justify-center py-2 px-4 w-full mt-auto bg-blue-500 text-white font-bold rounded-xl disabled:bg-blue-400 hover:bg-blue-400"
-                    >
-                        {isLoading ? <Loader /> : 'Confirm'}
-                    </button>
                 </div>
             ) : (
                 <p>Loading...</p>
@@ -224,6 +239,7 @@ const ManagePlugins = ({ poolId }: IManagePlugins) => {
                 <ManagePluginConfigModal
                     pluginConfig={pluginConfig}
                     onChange={handleCheckFlag}
+                    onReset={handleResetPluginConfig}
                     onConfirm={handleConfirm}
                     isLoading={isLoading}
                     title="Custom Hooks Settings"

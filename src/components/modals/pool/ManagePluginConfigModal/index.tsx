@@ -18,6 +18,7 @@ interface IManagePluginConfigModal {
     pluginConfig: number;
     isLoading: boolean;
     onConfirm: () => void;
+    onReset: () => void;
 }
 
 const ManagePluginConfigModal = ({
@@ -28,6 +29,7 @@ const ManagePluginConfigModal = ({
     pluginConfig,
     isLoading,
     onConfirm,
+    onReset
 }: IManagePluginConfigModal) => {
     return (
         <Credenza>
@@ -37,11 +39,19 @@ const ManagePluginConfigModal = ({
                     <CredenzaTitle>{title}</CredenzaTitle>
                 </CredenzaHeader>
                 <CredenzaBody className={'flex flex-col gap-4'}>
-                    <div>
-                        <p className="font-semibold text-sm">
-                            Plugin Config (uint8)
-                        </p>
-                        <p>{pluginConfig}</p>
+                    <div className='flex justify-between items-center'>
+                        <div>
+                            <p className="font-semibold text-sm">
+                                Plugin Config (uint8)
+                            </p>
+                            <p>{pluginConfig}</p>
+                        </div>
+                        <button 
+                            onClick={onReset}
+                            className='flex items-center h-fit justify-center border py-1 px-2 rounded-lg hover:bg-slate-100'
+                        >
+                            reset
+                        </button>
                     </div>
                     <hr />
                     {Object.entries(flags).map(([flag, value]) => (
