@@ -6,40 +6,33 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 
 import { publicProvider } from 'wagmi/providers/public'
 
-const holeskyChain = defineChain({
-    id: 17000,
-    network: 'holesky',
-    name: 'Holesky',
-    nativeCurrency: { name: 'Holesky Ether', symbol: 'ETH', decimals: 18 },
-    rpcUrls: {
-      default: {
-        http: [import.meta.env.VITE_INFURA_RPC],
-      },
-      public: {
-        http: [import.meta.env.VITE_INFURA_RPC],
-      },
+const rootstockChain = defineChain({
+  id: 30,
+  network: 'rootstock',
+  name: 'Rootstock',
+  nativeCurrency: { name: 'RBTC', symbol: 'RBTC', decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: [import.meta.env.VITE_INFURA_RPC],
     },
-    blockExplorers: {
-      etherscan: {
-        name: 'Etherscan',
-        url: 'https://holesky.etherscan.io',
-      },
-      default: {
-        name: 'Etherscan',
-        url: 'https://holesky.etherscan.io',
-      },
+    public: {
+      http: [import.meta.env.VITE_INFURA_RPC],
     },
-    contracts: {
-      multicall3: {
-        address: '0xca11bde05977b3631167028862be2a173976ca11',
-        blockCreated: 77,
-      },
+  },
+  blockExplorers: {
+    etherscan: {
+      name: 'RootScan',
+      url: 'https://explorer.rootstock.io',
     },
-    testnet: true,
-  }) 
+    default: {
+      name: 'RootScan',
+      url: 'https://explorer.rootstock.io',
+    },
+  },
+})
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [holeskyChain],
+  [rootstockChain],
   [
     publicProvider(),
   ],
