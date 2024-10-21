@@ -617,7 +617,6 @@ export enum Burn_OrderBy {
   PoolCommunityFee = 'pool__communityFee',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
-  PoolDeployer = 'pool__deployer',
   PoolFee = 'pool__fee',
   PoolFeeGrowthGlobal0X128 = 'pool__feeGrowthGlobal0X128',
   PoolFeeGrowthGlobal1X128 = 'pool__feeGrowthGlobal1X128',
@@ -839,7 +838,6 @@ export enum Collect_OrderBy {
   PoolCommunityFee = 'pool__communityFee',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
-  PoolDeployer = 'pool__deployer',
   PoolFee = 'pool__fee',
   PoolFeeGrowthGlobal0X128 = 'pool__feeGrowthGlobal0X128',
   PoolFeeGrowthGlobal1X128 = 'pool__feeGrowthGlobal1X128',
@@ -1529,7 +1527,6 @@ export enum Flash_OrderBy {
   PoolCommunityFee = 'pool__communityFee',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
-  PoolDeployer = 'pool__deployer',
   PoolFee = 'pool__fee',
   PoolFeeGrowthGlobal0X128 = 'pool__feeGrowthGlobal0X128',
   PoolFeeGrowthGlobal1X128 = 'pool__feeGrowthGlobal1X128',
@@ -1796,7 +1793,6 @@ export enum Mint_OrderBy {
   PoolCommunityFee = 'pool__communityFee',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
-  PoolDeployer = 'pool__deployer',
   PoolFee = 'pool__fee',
   PoolFeeGrowthGlobal0X128 = 'pool__feeGrowthGlobal0X128',
   PoolFeeGrowthGlobal1X128 = 'pool__feeGrowthGlobal1X128',
@@ -1883,7 +1879,6 @@ export type Pool = {
   communityFee: Scalars['BigInt']['output'];
   createdAtBlockNumber: Scalars['BigInt']['output'];
   createdAtTimestamp: Scalars['BigInt']['output'];
-  deployer: Scalars['Bytes']['output'];
   fee: Scalars['BigInt']['output'];
   feeGrowthGlobal0X128: Scalars['BigInt']['output'];
   feeGrowthGlobal1X128: Scalars['BigInt']['output'];
@@ -2233,7 +2228,6 @@ export enum PoolDayData_OrderBy {
   PoolCommunityFee = 'pool__communityFee',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
-  PoolDeployer = 'pool__deployer',
   PoolFee = 'pool__fee',
   PoolFeeGrowthGlobal0X128 = 'pool__feeGrowthGlobal0X128',
   PoolFeeGrowthGlobal1X128 = 'pool__feeGrowthGlobal1X128',
@@ -2569,7 +2563,6 @@ export enum PoolHourData_OrderBy {
   PoolCommunityFee = 'pool__communityFee',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
-  PoolDeployer = 'pool__deployer',
   PoolFee = 'pool__fee',
   PoolFeeGrowthGlobal0X128 = 'pool__feeGrowthGlobal0X128',
   PoolFeeGrowthGlobal1X128 = 'pool__feeGrowthGlobal1X128',
@@ -2746,7 +2739,6 @@ export enum PoolPosition_OrderBy {
   PoolCommunityFee = 'pool__communityFee',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
-  PoolDeployer = 'pool__deployer',
   PoolFee = 'pool__fee',
   PoolFeeGrowthGlobal0X128 = 'pool__feeGrowthGlobal0X128',
   PoolFeeGrowthGlobal1X128 = 'pool__feeGrowthGlobal1X128',
@@ -2850,16 +2842,6 @@ export type Pool_Filter = {
   createdAtTimestamp_lte?: InputMaybe<Scalars['BigInt']['input']>;
   createdAtTimestamp_not?: InputMaybe<Scalars['BigInt']['input']>;
   createdAtTimestamp_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-  deployer?: InputMaybe<Scalars['Bytes']['input']>;
-  deployer_contains?: InputMaybe<Scalars['Bytes']['input']>;
-  deployer_gt?: InputMaybe<Scalars['Bytes']['input']>;
-  deployer_gte?: InputMaybe<Scalars['Bytes']['input']>;
-  deployer_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
-  deployer_lt?: InputMaybe<Scalars['Bytes']['input']>;
-  deployer_lte?: InputMaybe<Scalars['Bytes']['input']>;
-  deployer_not?: InputMaybe<Scalars['Bytes']['input']>;
-  deployer_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
-  deployer_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
   fee?: InputMaybe<Scalars['BigInt']['input']>;
   feeGrowthGlobal0X128?: InputMaybe<Scalars['BigInt']['input']>;
   feeGrowthGlobal0X128_gt?: InputMaybe<Scalars['BigInt']['input']>;
@@ -3127,7 +3109,6 @@ export enum Pool_OrderBy {
   CommunityFee = 'communityFee',
   CreatedAtBlockNumber = 'createdAtBlockNumber',
   CreatedAtTimestamp = 'createdAtTimestamp',
-  Deployer = 'deployer',
   Fee = 'fee',
   FeeGrowthGlobal0X128 = 'feeGrowthGlobal0X128',
   FeeGrowthGlobal1X128 = 'feeGrowthGlobal1X128',
@@ -3432,7 +3413,6 @@ export enum PositionSnapshot_OrderBy {
   PoolCommunityFee = 'pool__communityFee',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
-  PoolDeployer = 'pool__deployer',
   PoolFee = 'pool__fee',
   PoolFeeGrowthGlobal0X128 = 'pool__feeGrowthGlobal0X128',
   PoolFeeGrowthGlobal1X128 = 'pool__feeGrowthGlobal1X128',
@@ -3760,7 +3740,6 @@ export enum Position_OrderBy {
   PoolCommunityFee = 'pool__communityFee',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
-  PoolDeployer = 'pool__deployer',
   PoolFee = 'pool__fee',
   PoolFeeGrowthGlobal0X128 = 'pool__feeGrowthGlobal0X128',
   PoolFeeGrowthGlobal1X128 = 'pool__feeGrowthGlobal1X128',
@@ -5261,7 +5240,6 @@ export enum Swap_OrderBy {
   PoolCommunityFee = 'pool__communityFee',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
-  PoolDeployer = 'pool__deployer',
   PoolFee = 'pool__fee',
   PoolFeeGrowthGlobal0X128 = 'pool__feeGrowthGlobal0X128',
   PoolFeeGrowthGlobal1X128 = 'pool__feeGrowthGlobal1X128',
@@ -5518,7 +5496,6 @@ export enum TickDayData_OrderBy {
   PoolCommunityFee = 'pool__communityFee',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
-  PoolDeployer = 'pool__deployer',
   PoolFee = 'pool__fee',
   PoolFeeGrowthGlobal0X128 = 'pool__feeGrowthGlobal0X128',
   PoolFeeGrowthGlobal1X128 = 'pool__feeGrowthGlobal1X128',
@@ -5711,7 +5688,6 @@ export enum TickHourData_OrderBy {
   PoolCommunityFee = 'pool__communityFee',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
-  PoolDeployer = 'pool__deployer',
   PoolFee = 'pool__fee',
   PoolFeeGrowthGlobal0X128 = 'pool__feeGrowthGlobal0X128',
   PoolFeeGrowthGlobal1X128 = 'pool__feeGrowthGlobal1X128',
@@ -5985,7 +5961,6 @@ export enum Tick_OrderBy {
   PoolCommunityFee = 'pool__communityFee',
   PoolCreatedAtBlockNumber = 'pool__createdAtBlockNumber',
   PoolCreatedAtTimestamp = 'pool__createdAtTimestamp',
-  PoolDeployer = 'pool__deployer',
   PoolFee = 'pool__fee',
   PoolFeeGrowthGlobal0X128 = 'pool__feeGrowthGlobal0X128',
   PoolFeeGrowthGlobal1X128 = 'pool__feeGrowthGlobal1X128',

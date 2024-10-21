@@ -6,11 +6,11 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 
 import { publicProvider } from 'wagmi/providers/public'
 
-const rootstockChain = defineChain({
-  id: 30,
-  network: 'rootstock',
-  name: 'Rootstock',
-  nativeCurrency: { name: 'RBTC', symbol: 'RBTC', decimals: 18 },
+const superseed = defineChain({
+  id: 53302,
+  name: 'Superseed',
+  network: 'superseed-sepolia',
+  nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
   rpcUrls: {
     default: {
       http: [import.meta.env.VITE_INFURA_RPC],
@@ -20,19 +20,17 @@ const rootstockChain = defineChain({
     },
   },
   blockExplorers: {
-    etherscan: {
-      name: 'RootScan',
-      url: 'https://explorer.rootstock.io',
-    },
     default: {
-      name: 'RootScan',
-      url: 'https://explorer.rootstock.io',
+      name: 'superseedExplorer',
+      url: 'https://sepolia-explorer.superseed.xyz/',
     },
   },
+  testnet: true,
 })
 
+
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [rootstockChain],
+  [superseed],
   [
     publicProvider(),
   ],
