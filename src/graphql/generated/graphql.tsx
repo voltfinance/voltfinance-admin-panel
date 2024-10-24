@@ -6993,19 +6993,19 @@ export type ActiveFarmingForPoolQueryVariables = Exact<{
 
 export type ActiveFarmingForPoolQuery = { __typename?: 'Query', eternalFarmings: Array<{ __typename?: 'EternalFarming', id: string, rewardToken: any, bonusRewardToken: any, reward: any, bonusReward: any, rewardRate: any, bonusRewardRate: any, pool: any, virtualPool: any, isDeactivated?: boolean | null, nonce: any }> };
 
-export type PoolFieldsFragment = { __typename?: 'Pool', id: string, fee: any, sqrtPrice: any, liquidity: any, tick: any, tickSpacing: any, totalValueLockedUSD: any, volumeUSD: any, feesUSD: any, untrackedFeesUSD: any, token0Price: any, token1Price: any, token0: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any, derivedMatic: any }, token1: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any, derivedMatic: any } };
+export type PoolFieldsFragment = { __typename?: 'Pool', id: string, fee: any, sqrtPrice: any, liquidity: any, tick: any, tickSpacing: any, deployer: any, totalValueLockedUSD: any, volumeUSD: any, feesUSD: any, untrackedFeesUSD: any, token0Price: any, token1Price: any, token0: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any, derivedMatic: any }, token1: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any, derivedMatic: any } };
 
 export type SinglePoolQueryVariables = Exact<{
   poolId: Scalars['ID']['input'];
 }>;
 
 
-export type SinglePoolQuery = { __typename?: 'Query', pool?: { __typename?: 'Pool', id: string, fee: any, sqrtPrice: any, liquidity: any, tick: any, tickSpacing: any, totalValueLockedUSD: any, volumeUSD: any, feesUSD: any, untrackedFeesUSD: any, token0Price: any, token1Price: any, token0: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any, derivedMatic: any }, token1: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any, derivedMatic: any } } | null };
+export type SinglePoolQuery = { __typename?: 'Query', pool?: { __typename?: 'Pool', id: string, fee: any, sqrtPrice: any, liquidity: any, tick: any, tickSpacing: any, deployer: any, totalValueLockedUSD: any, volumeUSD: any, feesUSD: any, untrackedFeesUSD: any, token0Price: any, token1Price: any, token0: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any, derivedMatic: any }, token1: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any, derivedMatic: any } } | null };
 
 export type AllPoolsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllPoolsQuery = { __typename?: 'Query', pools: Array<{ __typename?: 'Pool', id: string, fee: any, sqrtPrice: any, liquidity: any, tick: any, tickSpacing: any, totalValueLockedUSD: any, volumeUSD: any, feesUSD: any, untrackedFeesUSD: any, token0Price: any, token1Price: any, token0: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any, derivedMatic: any }, token1: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any, derivedMatic: any } }> };
+export type AllPoolsQuery = { __typename?: 'Query', pools: Array<{ __typename?: 'Pool', id: string, fee: any, sqrtPrice: any, liquidity: any, tick: any, tickSpacing: any, deployer: any, totalValueLockedUSD: any, volumeUSD: any, feesUSD: any, untrackedFeesUSD: any, token0Price: any, token1Price: any, token0: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any, derivedMatic: any }, token1: { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any, derivedMatic: any } }> };
 
 export type TokenFieldsFragment = { __typename?: 'Token', id: string, symbol: string, name: string, decimals: any, derivedMatic: any };
 
@@ -7059,6 +7059,7 @@ export const PoolFieldsFragmentDoc = gql`
   liquidity
   tick
   tickSpacing
+  deployer
   totalValueLockedUSD
   volumeUSD
   feesUSD

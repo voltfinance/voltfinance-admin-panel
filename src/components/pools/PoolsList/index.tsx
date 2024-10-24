@@ -3,10 +3,18 @@ import { FormattedPool } from '@/types/pool';
 import { Link } from 'react-router-dom';
 import { useMemo } from 'react';
 import { Address } from 'wagmi';
+import { ADDRESS_ZERO } from '@cryptoalgebra/custom-pools-and-sliding-fee-sdk';
+
+const deployers: { [key: string]: string } = {
+    '0x7e3387e0595552e992ede4476417704703866e5a': 'HAVE PLUGIN',
+    '0xbb75acad36f08201a49a6dd077229d95f4e7bd50': 'NO PLUGIN',
+    [ADDRESS_ZERO]: 'BASE'
+}
 
 const PoolHeader = () => (
-    <div className="hidden md:grid grid-cols-5 uppercase text-xs font-semibold text-gray-600 mb-4 pb-4 border-b border-gray-300">
+    <div className="hidden md:grid grid-cols-6 uppercase text-xs font-semibold text-gray-600 mb-4 pb-4 border-b border-gray-300">
         <div>Pool</div>
+        <div>Deployer</div>
         <div>TVL</div>
         <div>Volume 24H</div>
         <div>APR</div>
@@ -16,7 +24,7 @@ const PoolHeader = () => (
 
 const PoolRow = (pool: FormattedPool) => {
     return (
-        <div className="grid grid-cols-5 gap-4 md:gap-0 md:grid-cols-5 w-full text-left p-4 bg-gray-50 border border-gray-300 rounded-xl">
+        <div className="grid grid-cols-6 gap-4 md:gap-0 md:grid-cols-6 w-full text-left p-4 bg-gray-50 border border-gray-300 rounded-xl">
             {pool.pair.token0 && pool.pair.token1 && (
                 <div className="flex w-full justify-between">
                     <div className="md:hidden font-bold">Pool</div>
@@ -28,6 +36,12 @@ const PoolRow = (pool: FormattedPool) => {
                     </div>
                 </div>
             )}
+            {
+                pool.deployer && <div className='flex w-full justify-between'>
+                    <div className="md:hidden font-bold">Deployer</div>
+                    <div>{deployers[pool.deployer]}</div>
+                </div>
+            }
             {pool.tvlUSD ? (
                 <div className="flex w-full justify-between">
                     <div className="md:hidden font-bold">Pool</div>
@@ -72,12 +86,13 @@ const PoolsList = () => {
         if (!pools?.pools) return [];
 
         return pools.pools.map(
-            ({ id, token0, token1, fee, totalValueLockedUSD, volumeUSD }) => ({
+            ({ id, token0, token1, fee, totalValueLockedUSD, volumeUSD, deployer }) => ({
                 id: id as Address,
                 pair: {
                     token0,
                     token1,
                 },
+                deployer,
                 fee: Number(fee) / 10_000,
                 tvlUSD: Number(totalValueLockedUSD),
                 volume24USD: Number(volumeUSD),

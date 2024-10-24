@@ -8,6 +8,7 @@ export const POOL_FRAGMENT = gql`
         liquidity
         tick
         tickSpacing
+        deployer
         totalValueLockedUSD
         volumeUSD
         feesUSD

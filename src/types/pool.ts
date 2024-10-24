@@ -9,6 +9,7 @@ interface Pair {
 export interface FormattedPool {
     id: Address;
     pair: Pair;
+    deployer: string;
     fee: number;
     tvlUSD: number;
     volume24USD: number;

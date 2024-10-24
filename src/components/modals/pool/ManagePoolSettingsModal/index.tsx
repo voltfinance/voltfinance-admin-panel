@@ -98,7 +98,7 @@ const ManagePoolSettingsModal = ({
 
     const { data: initialBaseFee } = useAlgebraBasePluginSBaseFee({ address: pluginId })
     const [baseFee, setBaseFee] = useState<number>()
- 
+
     const { config: baseFeeConfig } = usePrepareAlgebraBasePluginSetBaseFee({
         address: pluginId,
         args: baseFee ? [baseFee] : undefined,
@@ -113,6 +113,7 @@ const ManagePoolSettingsModal = ({
     );
 
     useEffect(() => {
+        console.log('initialBaseFee', initialBaseFee, pluginId)
         if (initialBaseFee) {
             setBaseFee(initialBaseFee)
         }
@@ -134,19 +135,21 @@ const ManagePoolSettingsModal = ({
                     <CredenzaTitle>{title}</CredenzaTitle>
                 </CredenzaHeader>
                 <CredenzaBody className={'flex flex-col gap-4'}>
-                    {value === undefined ? (
-                        'Loading...'
-                    ) : (
-                        <Input
-                            type="number"
-                            required
-                            value={value}
-                            placeholder="Enter amount"
-                            onChange={(e) => {
-                                setValue(Number(e.target.value));
-                            }}
-                        />
-                    )}
+                    {isAdaptiveFee ? <Input type="number"
+                        required
+                        value={baseFee}
+                        placeholder="Enter fee"
+                        onChange={(e) => {
+                            setBaseFee(Number(e.target.value));
+                        }} /> : <Input
+                        type="number"
+                        required
+                        value={value}
+                        placeholder="Enter amount"
+                        onChange={(e) => {
+                            setValue(Number(e.target.value));
+                        }}
+                    />}
                     <button
                         disabled={isLoading || isFeeLoading}
                         onClick={handleConfirm}
