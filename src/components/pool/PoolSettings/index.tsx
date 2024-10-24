@@ -2,7 +2,6 @@ import DataWithCopyButton from '@/components/common/DataWithCopyButton';
 import ManagePoolSettingsModal from '@/components/modals/pool/ManagePoolSettingsModal';
 import { ALGEBRA_STUB_PLUGIN, PLUGIN_FACTORY } from '@/constants/addresses';
 import { pluginFactoryABI, useAlgebraPoolPlugin } from '@/generated';
-import { usePluginFlags } from '@/hooks/pools/usePluginFlags';
 import { usePool } from '@/hooks/pools/usePool';
 import { Address, useContractRead } from 'wagmi';
 import PoolActivationModal from '@/components/modals/pool/PoolActivationModal';
@@ -12,7 +11,6 @@ interface IPoolSettings {
 }
 
 const PoolSettings = ({ poolId }: IPoolSettings) => {
-    const flags = usePluginFlags(poolId);
 
     const { data: pluginId } = useAlgebraPoolPlugin({
         address: poolId,
@@ -26,9 +24,6 @@ const PoolSettings = ({ poolId }: IPoolSettings) => {
     });
 
     const isToActivate = pluginId === ALGEBRA_STUB_PLUGIN;
-
-    const isDynamicFeeDisabled =
-        flags?.DYNAMIC_FEE_FLAG === 1 && flags?.BEFORE_SWAP_FLAG === 1;
 
     const [, pool] = usePool(poolId);
 
@@ -57,27 +52,16 @@ const PoolSettings = ({ poolId }: IPoolSettings) => {
                         Community Fee
                     </button>
                 </ManagePoolSettingsModal>
-                {isDynamicFeeDisabled ? (
-                    <ManagePoolSettingsModal
-                        poolId={poolId}
-                        isDynamicFee={true}
-                        title="Dynamic Fee"
-                    >
-                        <button className="py-2 px-4 w-1/2 bg-blue-500 text-white font-bold rounded-xl hover:bg-blue-400">
-                            Dynamic Fee
-                        </button>
-                    </ManagePoolSettingsModal>
-                ) : (
-                    <ManagePoolSettingsModal
-                        poolId={poolId}
-                        functionName="setFee"
-                        title="Fee"
-                    >
-                        <button className="py-2 px-4 w-1/2 bg-blue-500 text-white font-bold rounded-xl hover:bg-blue-400">
-                            Fee
-                        </button>
-                    </ManagePoolSettingsModal>
-                )}
+                <ManagePoolSettingsModal
+                    poolId={poolId}
+                    functionName="setFee"
+                    title="Fee"
+                    isAdaptiveFee
+                >
+                    <button className="py-2 px-4 w-1/2 bg-blue-500 text-white font-bold rounded-xl hover:bg-blue-400">
+                        Fee
+                    </button>
+                </ManagePoolSettingsModal>
                 <ManagePoolSettingsModal
                     poolId={poolId}
                     functionName="setTickSpacing"

@@ -11,14 +11,13 @@ import { Input } from '@/components/ui/input';
 import {
     useAlgebraFactoryDefaultCommunityFee,
     useAlgebraFactoryDefaultTickspacing,
+    useAlgebraFactoryDefaultFee,
     usePrepareAlgebraFactorySetDefaultCommunityFee,
     usePrepareAlgebraFactorySetDefaultTickspacing,
-    usePreparePluginFactorySetDefaultFeeConfiguration,
+    usePreparePluginFactorySetDefaultBaseFee,
 } from '@/generated';
 import { useTransitionAwait } from '@/hooks/common/useTransactionAwait';
-import { usePluginFactoryFeeConfiguration } from '@/hooks/pools/useDefaultFeeConfiguration';
 import { cn } from '@/lib/utils';
-import { FeeConfiguration } from '@/types/pool-settings';
 import { useEffect, useState } from 'react';
 import { useContractWrite } from 'wagmi';
 
@@ -35,19 +34,9 @@ enum SettingsKeys {
 
 interface Settings {
     [SettingsKeys.COMMUNITY_FEE]: number;
-    [SettingsKeys.FEE]: FeeConfiguration;
+    [SettingsKeys.FEE]: number;
     [SettingsKeys.TICK_SPACING]: number;
 }
-
-const initialFee = {
-    alpha1: 0,
-    alpha2: 0,
-    beta1: 0,
-    beta2: 0,
-    gamma1: 0,
-    gamma2: 0,
-    baseFee: 0,
-};
 
 const PoolsDefaultSettingsModal = ({
     title,
@@ -55,24 +44,24 @@ const PoolsDefaultSettingsModal = ({
 }: IPoolsDefaultSettingsModal) => {
     const [settingsData, setSettingsData] = useState<Settings>({
         [SettingsKeys.COMMUNITY_FEE]: 0,
-        [SettingsKeys.FEE]: initialFee,
+        [SettingsKeys.FEE]: 0,
         [SettingsKeys.TICK_SPACING]: 0,
     });
 
-    const defaultFeeConfiguration = usePluginFactoryFeeConfiguration();
+    const { data: defaultFee } = useAlgebraFactoryDefaultFee()
 
     const { data: defaultCommunityFee } = useAlgebraFactoryDefaultCommunityFee();
 
     const { data: defaultTickSpacing } = useAlgebraFactoryDefaultTickspacing();
 
     useEffect(() => {
-        if (defaultCommunityFee === undefined || defaultTickSpacing === undefined || !defaultFeeConfiguration) return;
+        if (defaultCommunityFee === undefined || defaultTickSpacing === undefined || defaultFee === undefined) return;
         setSettingsData({
             [SettingsKeys.COMMUNITY_FEE]: defaultCommunityFee,
-            [SettingsKeys.FEE]: defaultFeeConfiguration,
+            [SettingsKeys.FEE]: defaultFee,
             [SettingsKeys.TICK_SPACING]: defaultTickSpacing,
         });
-    }, [defaultCommunityFee, defaultTickSpacing, defaultFeeConfiguration ]);
+    }, [defaultCommunityFee, defaultTickSpacing, defaultFee]);
 
     /* Set Default Community Fee */
     const { config: defaultCommunityFeeConfig } =
@@ -85,7 +74,7 @@ const PoolsDefaultSettingsModal = ({
 
     /* Set Default Fee */
     const { config: defaultFeeConfig } =
-        usePreparePluginFactorySetDefaultFeeConfiguration({
+        usePreparePluginFactorySetDefaultBaseFee({
             args: [settingsData[SettingsKeys.FEE]],
         });
 
@@ -95,7 +84,7 @@ const PoolsDefaultSettingsModal = ({
     /* Set Tick Spacing */
     const { config: tickSpacingConfig } =
         usePrepareAlgebraFactorySetDefaultTickspacing({
-            args: [settingsData[SettingsKeys.TICK_SPACING]] || undefined,
+            args: [settingsData[SettingsKeys.TICK_SPACING]],
         });
 
     const { data: tickSpacingHash, write: setDefaultTickSpacing } =
@@ -154,51 +143,17 @@ const PoolsDefaultSettingsModal = ({
                                     <h4 className="w-full font-semibold col-span-2">
                                         {key}
                                     </h4>
-                                    {key === SettingsKeys.FEE ? (
-                                        Object.entries(
-                                            settingsData[
-                                                key
-                                            ] as FeeConfiguration
-                                        ).map(([feeCfg, feeValue]) => (
-                                            <label
-                                                className="flex flex-col"
-                                                key={feeCfg}
-                                            >
-                                                {feeCfg}
-                                                <Input
-                                                    className="w-full"
-                                                    key={feeCfg}
-                                                    onChange={(e) =>
-                                                        setSettingsData({
-                                                            ...settingsData,
-                                                            [key]: {
-                                                                ...settingsData[
-                                                                    key
-                                                                ],
-                                                                [feeCfg]:
-                                                                    e.target
-                                                                        .value,
-                                                            },
-                                                        })
-                                                    }
-                                                    value={feeValue}
-                                                    type={'number'}
-                                                />
-                                            </label>
-                                        ))
-                                    ) : (
-                                        <Input
-                                            key={key}
-                                            onChange={(e) =>
-                                                setSettingsData({
-                                                    ...settingsData,
-                                                    [key]: e.target.value,
-                                                })
-                                            }
-                                            value={value}
-                                            type={'number'}
-                                        />
-                                    )}
+                                    <Input
+                                        key={key}
+                                        onChange={(e) =>
+                                            setSettingsData({
+                                                ...settingsData,
+                                                [key]: e.target.value,
+                                            })
+                                        }
+                                        value={value}
+                                        type={'number'}
+                                    />
                                     <button
                                         disabled={
                                             feeLoading ||

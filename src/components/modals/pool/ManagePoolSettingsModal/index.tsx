@@ -14,11 +14,10 @@ import {
     useAlgebraPoolGlobalState,
     useAlgebraPoolPlugin,
     useAlgebraPoolTickSpacing,
-    usePrepareAlgebraBasePluginChangeFeeConfiguration,
+    useAlgebraBasePluginSBaseFee,
+    usePrepareAlgebraBasePluginSetBaseFee,
 } from '@/generated';
 import { useTransitionAwait } from '@/hooks/common/useTransactionAwait';
-import { useBasePluginFeeConfiguration } from '@/hooks/pools/useDefaultFeeConfiguration';
-import { FeeConfiguration } from '@/types/pool-settings';
 import { useEffect, useState } from 'react';
 import { Address, useContractWrite, usePrepareContractWrite } from 'wagmi';
 
@@ -29,7 +28,7 @@ interface IManagePoolSettingsModal {
     functionName?: ManageFunctions;
     children: React.ReactNode;
     poolId: Address;
-    isDynamicFee?: boolean;
+    isAdaptiveFee?: boolean;
 }
 
 const ManagePoolSettingsModal = ({
@@ -37,7 +36,7 @@ const ManagePoolSettingsModal = ({
     functionName,
     children,
     poolId,
-    isDynamicFee = false,
+    isAdaptiveFee = false,
 }: IManagePoolSettingsModal) => {
     /* Single values */
     const [value, setValue] = useState<number>();
@@ -61,7 +60,7 @@ const ManagePoolSettingsModal = ({
 
     const { data: pluginId } = useAlgebraPoolPlugin({
         address: poolId,
-        enabled: !isDynamicFee,
+
     });
 
     const { config } = usePrepareContractWrite({
@@ -69,7 +68,7 @@ const ManagePoolSettingsModal = ({
         abi: algebraPoolABI,
         functionName,
         args: value !== undefined ? [value] : undefined,
-        enabled: Boolean(!isDynamicFee && value),
+        enabled: Boolean(!isAdaptiveFee && value),
     });
 
     const { data, write } = useContractWrite(config);
@@ -97,20 +96,16 @@ const ManagePoolSettingsModal = ({
         initialTickSpacing,
     ]);
 
-    /* Multi values (Dynamic fee) */
-    const initialDynamicFee = useBasePluginFeeConfiguration({ poolId });
+    const { data: initialBaseFee } = useAlgebraBasePluginSBaseFee({ address: pluginId })
+    const [baseFee, setBaseFee] = useState<number>()
+ 
+    const { config: baseFeeConfig } = usePrepareAlgebraBasePluginSetBaseFee({
+        address: pluginId,
+        args: baseFee ? [baseFee] : undefined,
+        enabled: Boolean(baseFee)
+    })
 
-    const [dynamicFee, setDynamicFee] = useState<FeeConfiguration | undefined>();
-
-    const { config: dynamicFeeConfig } =
-        usePrepareAlgebraBasePluginChangeFeeConfiguration({
-            address: pluginId,
-            args: dynamicFee && [dynamicFee],
-            enabled: Boolean(dynamicFee && pluginId),
-        });
-
-    const { data: feeHash, write: setFeeConfiguration } =
-        useContractWrite(dynamicFeeConfig);
+    const { data: feeHash, write: setFee } = useContractWrite(baseFeeConfig)
 
     const { isLoading: isFeeLoading } = useTransitionAwait(
         feeHash?.hash,
@@ -118,17 +113,15 @@ const ManagePoolSettingsModal = ({
     );
 
     useEffect(() => {
-        if (initialDynamicFee) {
-            setDynamicFee(initialDynamicFee);
+        if (initialBaseFee) {
+            setBaseFee(initialBaseFee)
         }
-    },[initialDynamicFee])
+    }, [initialBaseFee])
 
     const handleConfirm = () => {
-        if (isDynamicFee) {
-            console.log(dynamicFee);
-            setFeeConfiguration?.();
+        if (isAdaptiveFee) {
+            setFee?.()
         } else {
-            console.log(functionName, value);
             write?.();
         }
     };
@@ -140,37 +133,8 @@ const ManagePoolSettingsModal = ({
                 <CredenzaHeader>
                     <CredenzaTitle>{title}</CredenzaTitle>
                 </CredenzaHeader>
-                <CredenzaBody
-                    className={
-                        isDynamicFee
-                            ? 'grid grid-cols-2 gap-4'
-                            : 'flex flex-col gap-4'
-                    }
-                >
-                    {isDynamicFee && dynamicFee ? (
-                        Object.entries(dynamicFee).map(([key, feeValue]) => (
-                            <label key={key} className="">
-                                <h4 className="">{key}</h4>
-                                <Input
-                                    key={key}
-                                    className="w-full"
-                                    type="number"
-                                    required
-                                    value={feeValue}
-                                    placeholder="Enter amount"
-                                    onChange={(e) => {
-                                        setDynamicFee((prev) => {
-                                            if (!prev) return;
-                                            return {
-                                                ...prev,
-                                                [key]: Number(e.target.value),
-                                            };
-                                        });
-                                    }}
-                                />{' '}
-                            </label>
-                        ))
-                    ) : !dynamicFee || value === undefined ? (
+                <CredenzaBody className={'flex flex-col gap-4'}>
+                    {value === undefined ? (
                         'Loading...'
                     ) : (
                         <Input
