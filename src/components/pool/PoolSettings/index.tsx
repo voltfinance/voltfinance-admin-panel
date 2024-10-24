@@ -5,12 +5,14 @@ import { pluginFactoryABI, useAlgebraPoolPlugin } from '@/generated';
 import { usePool } from '@/hooks/pools/usePool';
 import { Address, useContractRead } from 'wagmi';
 import PoolActivationModal from '@/components/modals/pool/PoolActivationModal';
+import { ADDRESS_ZERO } from '@cryptoalgebra/custom-pools-and-sliding-fee-sdk';
 
 interface IPoolSettings {
     poolId: Address;
+    deployer: Address;
 }
 
-const PoolSettings = ({ poolId }: IPoolSettings) => {
+const PoolSettings = ({ poolId, deployer }: IPoolSettings) => {
 
     const { data: pluginId } = useAlgebraPoolPlugin({
         address: poolId,
@@ -52,7 +54,7 @@ const PoolSettings = ({ poolId }: IPoolSettings) => {
                         Community Fee
                     </button>
                 </ManagePoolSettingsModal>
-                <ManagePoolSettingsModal
+                {deployer === ADDRESS_ZERO && <ManagePoolSettingsModal
                     poolId={poolId}
                     functionName="setFee"
                     title="Fee"
@@ -61,7 +63,7 @@ const PoolSettings = ({ poolId }: IPoolSettings) => {
                     <button className="py-2 px-4 w-1/2 bg-blue-500 text-white font-bold rounded-xl hover:bg-blue-400">
                         Fee
                     </button>
-                </ManagePoolSettingsModal>
+                </ManagePoolSettingsModal>}
                 <ManagePoolSettingsModal
                     poolId={poolId}
                     functionName="setTickSpacing"

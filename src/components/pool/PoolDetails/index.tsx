@@ -18,6 +18,10 @@ const PoolDetails = ({ pool, poolId }: IPoolDetails) => {
                     <DataWithCopyButton data={poolId} />
                 </div>
                 <div>
+                    <p className="font-semibold text-sm">Deployer</p>
+                    <DataWithCopyButton data={pool.deployer} />
+                </div>
+                <div>
                     <p className="font-semibold text-sm">TVL USD</p>
                     <p>{pool.totalValueLockedUSD} $</p>
                 </div>
