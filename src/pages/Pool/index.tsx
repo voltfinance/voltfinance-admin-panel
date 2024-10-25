@@ -38,7 +38,7 @@ const PoolPage = () => {
                         <PoolDetails poolId={poolId} pool={pool.pool} />
                         <ManagePlugins poolId={poolId} />
                         <TokenDetails poolId={poolId} name="Tokens" />
-                        <PoolSettings poolId={poolId} />
+                        <PoolSettings poolId={poolId} deployer={pool.pool.deployer} />
                     </div>
                 </>
             ) : (
