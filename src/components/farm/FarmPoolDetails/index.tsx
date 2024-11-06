@@ -20,8 +20,8 @@ const FarmPoolDetails = ({ name, id }: IFarmPoolDetails) => {
         if (!pool?.pool) return;
 
         return {
-            token0To1Rate: Number(pool.pool.token0Price).toFixed(4),
-            token1To0Rate: Number(pool.pool.token1Price).toFixed(4),
+            token0To1Rate: Number(pool.pool.token1Price).toFixed(6),
+            token1To0Rate: Number(pool.pool.token0Price).toFixed(6),
             tvlUSD: formatCurrency.format(pool.pool.totalValueLockedUSD),
         };
     }, [pool]);
