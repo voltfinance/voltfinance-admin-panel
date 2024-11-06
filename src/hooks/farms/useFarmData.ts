@@ -6,7 +6,7 @@ import {
   useAlgebraVirtualPoolRewardReserves,
 } from "@/generated";
 import { FarmingFieldsFragment } from "@/graphql/generated/graphql";
-import { ADDRESS_ZERO } from "@cryptoalgebra/custom-pools-and-sliding-fee-sdk";
+import { ADDRESS_ZERO } from "@cryptoalgebra/fuse-sdk";
 import { formatUnits } from "viem";
 import { useToken } from "wagmi";
 

@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import { Address, useToken } from "wagmi";
-import { Token } from "@cryptoalgebra/custom-pools-and-sliding-fee-sdk";
-import { ExtendedNative } from "@cryptoalgebra/custom-pools-and-sliding-fee-sdk";
-import { ADDRESS_ZERO } from "@cryptoalgebra/custom-pools-and-sliding-fee-sdk";
+import { Token } from "@cryptoalgebra/fuse-sdk";
+import { ExtendedNative } from "@cryptoalgebra/fuse-sdk";
+import { ADDRESS_ZERO } from "@cryptoalgebra/fuse-sdk";
 import {
   DEFAULT_CHAIN_ID,
   DEFAULT_NATIVE_NAME,

@@ -3,8 +3,8 @@ import {
   Currency,
   ExtendedNative,
   WNATIVE,
-} from "@cryptoalgebra/custom-pools-and-sliding-fee-sdk";
-import { ADDRESS_ZERO } from "@cryptoalgebra/custom-pools-and-sliding-fee-sdk";
+} from "@cryptoalgebra/fuse-sdk";
+import { ADDRESS_ZERO } from "@cryptoalgebra/fuse-sdk";
 import {
   DEFAULT_CHAIN_ID,
   DEFAULT_NATIVE_NAME,

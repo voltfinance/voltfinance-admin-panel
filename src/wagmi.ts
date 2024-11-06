@@ -6,11 +6,11 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 
 import { publicProvider } from 'wagmi/providers/public'
 
-const holeskyChain = defineChain({
-    id: 17000,
-    network: 'holesky',
-    name: 'Holesky',
-    nativeCurrency: { name: 'Holesky Ether', symbol: 'ETH', decimals: 18 },
+const fuseChain = defineChain({
+    id: 122,
+    network: 'Fuse',
+    name: 'Fuse',
+    nativeCurrency: { name: 'Fuse', symbol: 'FUSE', decimals: 18 },
     rpcUrls: {
       default: {
         http: [import.meta.env.VITE_INFURA_RPC],
@@ -21,25 +21,24 @@ const holeskyChain = defineChain({
     },
     blockExplorers: {
       etherscan: {
-        name: 'Etherscan',
-        url: 'https://holesky.etherscan.io',
+        name: 'Fusescan',
+        url: 'https://explorer.fuse.io',
       },
       default: {
-        name: 'Etherscan',
-        url: 'https://holesky.etherscan.io',
+        name: 'Fusescan',
+        url: 'https://explorer.fuse.io',
       },
     },
     contracts: {
       multicall3: {
-        address: '0xca11bde05977b3631167028862be2a173976ca11',
-        blockCreated: 77,
+        address: '0xcA11bde05977b3631167028862bE2a173976CA11',
+        blockCreated: 16146628,
       },
     },
-    testnet: true,
   }) 
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [holeskyChain],
+  [fuseChain],
   [
     publicProvider(),
   ],

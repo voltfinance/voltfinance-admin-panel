@@ -14,7 +14,7 @@ import {
   Currency,
   ExtendedNative,
   Token,
-} from "@cryptoalgebra/custom-pools-and-sliding-fee-sdk";
+} from "@cryptoalgebra/fuse-sdk";
 import { formatCurrency } from "@/utils/common/formatCurrency";
 import { useTokensState } from "@/state/tokensStore";
 import { Copy } from "lucide-react";

@@ -1,4 +1,4 @@
-import { Currency } from "@cryptoalgebra/custom-pools-and-sliding-fee-sdk";
+import { Currency } from "@cryptoalgebra/fuse-sdk";
 import React from "react";
 import { Address } from "wagmi";
 import EthLogo from "@/assets/tokens/ether.svg";

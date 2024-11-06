@@ -569,10 +569,10 @@
     stream-browserify "^3.0.0"
     util "^0.12.4"
 
-"@cryptoalgebra/custom-pools-and-sliding-fee-sdk@^1.0.0":
+"@cryptoalgebra/fuse-sdk@^1.0.0":
   version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@cryptoalgebra/custom-pools-and-sliding-fee-sdk/-/custom-pools-and-sliding-fee-sdk-1.0.0.tgz#8ee764a4d29404db567c102875559cb81176a282"
-  integrity sha512-Flj30wDgx85/luzTeXs3c8O7BuPKKpaEWBB0W6cC/VZycT5rK6GBkVWMiwCmCRSPcn4CvAh5dUep0N4wEW4XVg==
+  resolved "https://registry.yarnpkg.com/@cryptoalgebra/fuse-sdk/-/fuse-sdk-1.0.0.tgz#c83ee9914be8917057e09dacf70ac8aa2de0200c"
+  integrity sha512-c+OK2KB3fdhmZ5kvrqwBh2Kv9OT/0lIkHeDAisQ2AC3uRe2C97je8C993X7aMXry4rDMwRUtwnEk0eVxDEyFdg==
   dependencies:
     "@ethersproject/abi" "^5.7.0"
     "@ethersproject/address" "^5.7.0"
