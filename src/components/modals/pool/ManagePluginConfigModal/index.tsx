@@ -29,7 +29,7 @@ const ManagePluginConfigModal = ({
     pluginConfig,
     isLoading,
     onConfirm,
-    onReset
+    onReset,
 }: IManagePluginConfigModal) => {
     return (
         <Credenza>
@@ -39,16 +39,14 @@ const ManagePluginConfigModal = ({
                     <CredenzaTitle>{title}</CredenzaTitle>
                 </CredenzaHeader>
                 <CredenzaBody className={'flex flex-col gap-4'}>
-                    <div className='flex justify-between items-center'>
+                    <div className="flex justify-between items-center">
                         <div>
-                            <p className="font-semibold text-sm">
-                                Plugin Config (uint8)
-                            </p>
+                            <p className="font-semibold text-sm">Plugin Config (uint8)</p>
                             <p>{pluginConfig}</p>
                         </div>
-                        <button 
+                        <button
                             onClick={onReset}
-                            className='flex items-center h-fit justify-center border py-1 px-2 rounded-lg hover:bg-slate-100'
+                            className="flex items-center h-fit justify-center border py-1 px-2 rounded-lg hover:bg-slate-100"
                         >
                             reset
                         </button>
@@ -58,9 +56,7 @@ const ManagePluginConfigModal = ({
                         <label className="flex justify-between" key={flag}>
                             {flag} = {value}
                             <Switch
-                                onCheckedChange={() =>
-                                    onChange(flag as keyof PluginFlags)
-                                }
+                                onCheckedChange={() => onChange(flag as keyof PluginFlags)}
                                 checked={Boolean(value)}
                             />
                         </label>

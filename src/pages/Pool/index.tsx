@@ -19,10 +19,7 @@ const PoolPage = () => {
 
     return (
         <PageContainer>
-            <Link
-                to={'/pools'}
-                className="flex items-center gap-2 mb-4 hover:text-black/70"
-            >
+            <Link to={'/pools'} className="flex items-center gap-2 mb-4 hover:text-black/70">
                 <ArrowLeft size={16} />
                 <span>Back</span>
             </Link>

@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
 export const POOL_FRAGMENT = gql`
     fragment PoolFields on Pool {
@@ -22,7 +22,7 @@ export const POOL_FRAGMENT = gql`
             ...TokenFields
         }
     }
-`
+`;
 
 export const SINGLE_POOL = gql`
     query SinglePool($poolId: ID!) {
@@ -30,7 +30,7 @@ export const SINGLE_POOL = gql`
             ...PoolFields
         }
     }
-`
+`;
 
 export const ALL_POOLS = gql`
     query AllPools {
@@ -38,4 +38,4 @@ export const ALL_POOLS = gql`
             ...PoolFields
         }
     }
-`
+`;

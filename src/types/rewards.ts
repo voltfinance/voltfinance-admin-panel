@@ -7,4 +7,4 @@ export type IRewards = Partial<{
     bonusRewardBn: bigint;
     bonusRewardRate: string;
     bonusRewardRateBn: bigint;
-}>
+}>;

@@ -60,7 +60,6 @@ const ManagePoolSettingsModal = ({
 
     const { data: pluginId } = useAlgebraPoolPlugin({
         address: poolId,
-
     });
 
     const { config } = usePrepareContractWrite({
@@ -89,39 +88,31 @@ const ManagePoolSettingsModal = ({
             default:
                 setValue(undefined);
         }
-    }, [
-        functionName,
-        initialStaticFee,
-        initialCommunityFee,
-        initialTickSpacing,
-    ]);
+    }, [functionName, initialStaticFee, initialCommunityFee, initialTickSpacing]);
 
-    const { data: initialBaseFee } = useAlgebraBasePluginSBaseFee({ address: pluginId })
-    const [baseFee, setBaseFee] = useState<number>()
+    const { data: initialBaseFee } = useAlgebraBasePluginSBaseFee({ address: pluginId });
+    const [baseFee, setBaseFee] = useState<number>();
 
     const { config: baseFeeConfig } = usePrepareAlgebraBasePluginSetBaseFee({
         address: pluginId,
         args: baseFee ? [baseFee] : undefined,
-        enabled: Boolean(baseFee)
-    })
+        enabled: Boolean(baseFee),
+    });
 
-    const { data: feeHash, write: setFee } = useContractWrite(baseFeeConfig)
+    const { data: feeHash, write: setFee } = useContractWrite(baseFeeConfig);
 
-    const { isLoading: isFeeLoading } = useTransitionAwait(
-        feeHash?.hash,
-        title
-    );
+    const { isLoading: isFeeLoading } = useTransitionAwait(feeHash?.hash, title);
 
     useEffect(() => {
-        console.log('initialBaseFee', initialBaseFee, pluginId)
+        console.log('initialBaseFee', initialBaseFee, pluginId);
         if (initialBaseFee) {
-            setBaseFee(initialBaseFee)
+            setBaseFee(initialBaseFee);
         }
-    }, [initialBaseFee])
+    }, [initialBaseFee]);
 
     const handleConfirm = () => {
         if (isAdaptiveFee) {
-            setFee?.()
+            setFee?.();
         } else {
             write?.();
         }
@@ -135,31 +126,33 @@ const ManagePoolSettingsModal = ({
                     <CredenzaTitle>{title}</CredenzaTitle>
                 </CredenzaHeader>
                 <CredenzaBody className={'flex flex-col gap-4'}>
-                    {isAdaptiveFee ? <Input type="number"
-                        required
-                        value={baseFee}
-                        placeholder="Enter fee"
-                        onChange={(e) => {
-                            setBaseFee(Number(e.target.value));
-                        }} /> : <Input
-                        type="number"
-                        required
-                        value={value}
-                        placeholder="Enter amount"
-                        onChange={(e) => {
-                            setValue(Number(e.target.value));
-                        }}
-                    />}
+                    {isAdaptiveFee ? (
+                        <Input
+                            type="number"
+                            required
+                            value={baseFee}
+                            placeholder="Enter fee"
+                            onChange={(e) => {
+                                setBaseFee(Number(e.target.value));
+                            }}
+                        />
+                    ) : (
+                        <Input
+                            type="number"
+                            required
+                            value={value}
+                            placeholder="Enter amount"
+                            onChange={(e) => {
+                                setValue(Number(e.target.value));
+                            }}
+                        />
+                    )}
                     <button
                         disabled={isLoading || isFeeLoading}
                         onClick={handleConfirm}
                         className="flex col-span-2 justify-center w-full p-2 bg-blue-500 text-white font-bold rounded-xl hover:bg-blue-400 disabled:bg-blue-400"
                     >
-                        {isLoading ? (
-                            <Loader color="currentColor" />
-                        ) : (
-                            'Confirm'
-                        )}
+                        {isLoading ? <Loader color="currentColor" /> : 'Confirm'}
                     </button>
                 </CredenzaBody>
             </CredenzaContent>

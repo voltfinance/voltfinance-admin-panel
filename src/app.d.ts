@@ -7,4 +7,4 @@ declare global {
     type Position = 'top' | 'top-right' | 'right' | 'bottom-right' | 'bottom' | 'bottom-left' | 'left' | 'top-left';
 }
 
-export { };
+export {};

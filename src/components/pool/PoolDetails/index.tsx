@@ -42,9 +42,7 @@ const PoolDetails = ({ pool, poolId }: IPoolDetails) => {
                     <p>{pool.untrackedFeesUSD} $</p>
                 </div>
                 <div>
-                    <p className="font-semibold text-sm">
-                        Current Tick Spacing
-                    </p>
+                    <p className="font-semibold text-sm">Current Tick Spacing</p>
                     <p>{pool.tickSpacing}</p>
                 </div>
                 <div>

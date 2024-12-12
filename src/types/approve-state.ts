@@ -3,6 +3,6 @@ export const ApprovalState = {
     NOT_APPROVED: 'NOT_APPROVED',
     PENDING: 'PENDING',
     APPROVED: 'APPROVED',
-}
+};
 
-export type ApprovalStateType = typeof ApprovalState[keyof typeof ApprovalState]
+export type ApprovalStateType = (typeof ApprovalState)[keyof typeof ApprovalState];

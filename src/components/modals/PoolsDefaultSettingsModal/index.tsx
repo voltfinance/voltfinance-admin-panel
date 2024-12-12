@@ -38,17 +38,14 @@ interface Settings {
     [SettingsKeys.TICK_SPACING]: number;
 }
 
-const PoolsDefaultSettingsModal = ({
-    title,
-    children,
-}: IPoolsDefaultSettingsModal) => {
+const PoolsDefaultSettingsModal = ({ title, children }: IPoolsDefaultSettingsModal) => {
     const [settingsData, setSettingsData] = useState<Settings>({
         [SettingsKeys.COMMUNITY_FEE]: 0,
         [SettingsKeys.FEE]: 0,
         [SettingsKeys.TICK_SPACING]: 0,
     });
 
-    const { data: defaultFee } = useAlgebraFactoryDefaultFee()
+    const { data: defaultFee } = useAlgebraFactoryDefaultFee();
 
     const { data: defaultCommunityFee } = useAlgebraFactoryDefaultCommunityFee();
 
@@ -64,44 +61,29 @@ const PoolsDefaultSettingsModal = ({
     }, [defaultCommunityFee, defaultTickSpacing, defaultFee]);
 
     /* Set Default Community Fee */
-    const { config: defaultCommunityFeeConfig } =
-        usePrepareAlgebraFactorySetDefaultCommunityFee({
-            args: [settingsData[SettingsKeys.COMMUNITY_FEE]],
-        });
+    const { config: defaultCommunityFeeConfig } = usePrepareAlgebraFactorySetDefaultCommunityFee({
+        args: [settingsData[SettingsKeys.COMMUNITY_FEE]],
+    });
 
-    const { data: communityFeeHash, write: setDefaultCommunityFee } =
-        useContractWrite(defaultCommunityFeeConfig);
+    const { data: communityFeeHash, write: setDefaultCommunityFee } = useContractWrite(defaultCommunityFeeConfig);
 
     /* Set Default Fee */
-    const { config: defaultFeeConfig } =
-        usePreparePluginFactorySetDefaultBaseFee({
-            args: [settingsData[SettingsKeys.FEE]],
-        });
+    const { config: defaultFeeConfig } = usePreparePluginFactorySetDefaultBaseFee({
+        args: [settingsData[SettingsKeys.FEE]],
+    });
 
-    const { data: feeHash, write: setDefaultFeeConfiguration } =
-        useContractWrite(defaultFeeConfig);
+    const { data: feeHash, write: setDefaultFeeConfiguration } = useContractWrite(defaultFeeConfig);
 
     /* Set Tick Spacing */
-    const { config: tickSpacingConfig } =
-        usePrepareAlgebraFactorySetDefaultTickspacing({
-            args: [settingsData[SettingsKeys.TICK_SPACING]],
-        });
+    const { config: tickSpacingConfig } = usePrepareAlgebraFactorySetDefaultTickspacing({
+        args: [settingsData[SettingsKeys.TICK_SPACING]],
+    });
 
-    const { data: tickSpacingHash, write: setDefaultTickSpacing } =
-        useContractWrite(tickSpacingConfig);
+    const { data: tickSpacingHash, write: setDefaultTickSpacing } = useContractWrite(tickSpacingConfig);
 
-    const { isLoading: feeLoading } = useTransitionAwait(
-        feeHash?.hash,
-        'Set Default Fee'
-    );
-    const { isLoading: communityFeeLoading } = useTransitionAwait(
-        communityFeeHash?.hash,
-        'Set Community Fee'
-    );
-    const { isLoading: tickSpacingLoading } = useTransitionAwait(
-        tickSpacingHash?.hash,
-        'Set Tick Spacing'
-    );
+    const { isLoading: feeLoading } = useTransitionAwait(feeHash?.hash, 'Set Default Fee');
+    const { isLoading: communityFeeLoading } = useTransitionAwait(communityFeeHash?.hash, 'Set Community Fee');
+    const { isLoading: tickSpacingLoading } = useTransitionAwait(tickSpacingHash?.hash, 'Set Tick Spacing');
 
     const handleSubmit = (e: React.FormEvent, key: SettingsKeys) => {
         e.preventDefault();
@@ -129,51 +111,35 @@ const PoolsDefaultSettingsModal = ({
                 </CredenzaHeader>
                 <CredenzaBody className="flex flex-col gap-4">
                     <form className="flex flex-col gap-4 items-center">
-                        {Object.entries(settingsData as Settings).map(
-                            ([key, value]) => (
-                                <label
-                                    className={cn(
-                                        'gap-2 mb-2 w-full',
-                                        key === SettingsKeys.FEE
-                                            ? 'grid grid-cols-2'
-                                            : 'flex flex-col'
-                                    )}
+                        {Object.entries(settingsData as Settings).map(([key, value]) => (
+                            <label
+                                className={cn(
+                                    'gap-2 mb-2 w-full',
+                                    key === SettingsKeys.FEE ? 'grid grid-cols-2' : 'flex flex-col'
+                                )}
+                                key={key}
+                            >
+                                <h4 className="w-full font-semibold col-span-2">{key}</h4>
+                                <Input
                                     key={key}
+                                    onChange={(e) =>
+                                        setSettingsData({
+                                            ...settingsData,
+                                            [key]: e.target.value,
+                                        })
+                                    }
+                                    value={value}
+                                    type={'number'}
+                                />
+                                <button
+                                    disabled={feeLoading || communityFeeLoading || tickSpacingLoading}
+                                    onClick={(e) => handleSubmit(e, key as SettingsKeys)}
+                                    className="flex col-span-2 justify-center w-full p-2 bg-blue-500 text-white font-bold rounded-xl hover:bg-blue-400 disabled:bg-blue-400"
                                 >
-                                    <h4 className="w-full font-semibold col-span-2">
-                                        {key}
-                                    </h4>
-                                    <Input
-                                        key={key}
-                                        onChange={(e) =>
-                                            setSettingsData({
-                                                ...settingsData,
-                                                [key]: e.target.value,
-                                            })
-                                        }
-                                        value={value}
-                                        type={'number'}
-                                    />
-                                    <button
-                                        disabled={
-                                            feeLoading ||
-                                            communityFeeLoading ||
-                                            tickSpacingLoading
-                                        }
-                                        onClick={(e) =>
-                                            handleSubmit(e, key as SettingsKeys)
-                                        }
-                                        className="flex col-span-2 justify-center w-full p-2 bg-blue-500 text-white font-bold rounded-xl hover:bg-blue-400 disabled:bg-blue-400"
-                                    >
-                                        {feeLoading ||
-                                        communityFeeLoading ||
-                                        tickSpacingLoading
-                                            ? <Loader />
-                                            : 'Confirm'}
-                                    </button>
-                                </label>
-                            )
-                        )}
+                                    {feeLoading || communityFeeLoading || tickSpacingLoading ? <Loader /> : 'Confirm'}
+                                </button>
+                            </label>
+                        ))}
                     </form>
                 </CredenzaBody>
             </CredenzaContent>

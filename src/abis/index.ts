@@ -4,5 +4,5 @@ export * from './algebraPool';
 export * from './algebraFactory';
 export * from './pluginFactory';
 export * from './algebraBasePlugin';
-export * from './algebraVirtualPool'
-export * from './algebraStubPlugin'
+export * from './algebraVirtualPool';
+export * from './algebraStubPlugin';

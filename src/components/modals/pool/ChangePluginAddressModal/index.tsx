@@ -20,11 +20,7 @@ interface IChangePluginAddressModal {
     poolId: Address;
 }
 
-const ChangePluginAddressModal = ({
-    title,
-    children,
-    poolId,
-}: IChangePluginAddressModal) => {
+const ChangePluginAddressModal = ({ title, children, poolId }: IChangePluginAddressModal) => {
     const [value, setValue] = useState<string>('');
     const [isAddressValid, setIsAddressValid] = useState<boolean>(false);
 
@@ -61,11 +57,7 @@ const ChangePluginAddressModal = ({
                         value={value}
                         onChange={(e) => setValue(e.target.value)}
                     />
-                    {isAddressValid && (
-                        <p className="text-red-500 text-sm">
-                            Incorrect address!
-                        </p>
-                    )}
+                    {isAddressValid && <p className="text-red-500 text-sm">Incorrect address!</p>}
                     <button
                         disabled={isLoading}
                         onClick={handleConfirm}

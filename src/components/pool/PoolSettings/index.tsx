@@ -13,7 +13,6 @@ interface IPoolSettings {
 }
 
 const PoolSettings = ({ poolId, deployer }: IPoolSettings) => {
-
     const { data: pluginId } = useAlgebraPoolPlugin({
         address: poolId,
     });
@@ -45,30 +44,19 @@ const PoolSettings = ({ poolId, deployer }: IPoolSettings) => {
                 <DataWithCopyButton data={ALGEBRA_STUB_PLUGIN} />
             </div>
             <div className="flex gap-4 mt-auto">
-                <ManagePoolSettingsModal
-                    poolId={poolId}
-                    functionName="setCommunityFee"
-                    title="Community Fee"
-                >
+                <ManagePoolSettingsModal poolId={poolId} functionName="setCommunityFee" title="Community Fee">
                     <button className="py-2 px-4 w-1/2 bg-blue-500 text-white font-bold rounded-xl hover:bg-blue-400">
                         Community Fee
                     </button>
                 </ManagePoolSettingsModal>
-                {deployer === ADDRESS_ZERO && <ManagePoolSettingsModal
-                    poolId={poolId}
-                    functionName="setFee"
-                    title="Fee"
-                    isAdaptiveFee
-                >
-                    <button className="py-2 px-4 w-1/2 bg-blue-500 text-white font-bold rounded-xl hover:bg-blue-400">
-                        Fee
-                    </button>
-                </ManagePoolSettingsModal>}
-                <ManagePoolSettingsModal
-                    poolId={poolId}
-                    functionName="setTickSpacing"
-                    title="Tick Spacing"
-                >
+                {deployer === ADDRESS_ZERO && (
+                    <ManagePoolSettingsModal poolId={poolId} functionName="setFee" title="Fee" isAdaptiveFee>
+                        <button className="py-2 px-4 w-1/2 bg-blue-500 text-white font-bold rounded-xl hover:bg-blue-400">
+                            Fee
+                        </button>
+                    </ManagePoolSettingsModal>
+                )}
+                <ManagePoolSettingsModal poolId={poolId} functionName="setTickSpacing" title="Tick Spacing">
                     <button className="py-2 px-4 w-1/2 bg-blue-500 text-white font-bold rounded-xl hover:bg-blue-400">
                         Tick Spacing
                     </button>

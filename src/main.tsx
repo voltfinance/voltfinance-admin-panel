@@ -1,11 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import {
-    Navigate,
-    RouterProvider,
-    createBrowserRouter,
-} from 'react-router-dom';
+import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom';
 import FarmsPage from './pages/Farms/index.tsx';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import LayoutApp from './App.tsx';

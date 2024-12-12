@@ -20,13 +20,7 @@ interface IPoolActivationModal {
     isToActivate: boolean;
 }
 
-const PoolActivationModal = ({
-    title,
-    children,
-    poolId,
-    pluginId,
-    isToActivate,
-}: IPoolActivationModal) => {
+const PoolActivationModal = ({ title, children, poolId, pluginId, isToActivate }: IPoolActivationModal) => {
     const { config } = usePrepareAlgebraPoolSetPlugin({
         address: poolId,
         args: [pluginId],
@@ -53,8 +47,7 @@ const PoolActivationModal = ({
                     </div>
                     <hr />
                     <div>
-                        This will change Current plugin address to{' '}
-                        {isToActivate ? 'Base' : 'Stub'} plugin address.
+                        This will change Current plugin address to {isToActivate ? 'Base' : 'Stub'} plugin address.
                     </div>
                     <button
                         disabled={isLoading}

@@ -1,10 +1,10 @@
-import { Address } from "viem";
+import { Address } from 'viem';
 
 export type IncentiveKey = {
     rewardToken: Address;
     bonusRewardToken: Address;
     pool: Address;
     nonce: bigint;
-}
+};
 
-export type PartialIncentiveKey = Partial<IncentiveKey>
+export type PartialIncentiveKey = Partial<IncentiveKey>;

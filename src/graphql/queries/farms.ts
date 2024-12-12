@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
 export const FARMING_FRAGMENT = gql`
     fragment FarmingFields on EternalFarming {
@@ -14,14 +14,14 @@ export const FARMING_FRAGMENT = gql`
         isDeactivated
         nonce
     }
-`
+`;
 
 export const DEPOSIT_FRAGMENT = gql`
     fragment DepositFields on Deposit {
         id
         eternalFarming
     }
-`
+`;
 
 export const ALL_FARMINGS = gql`
     query AllFarms {
@@ -29,7 +29,7 @@ export const ALL_FARMINGS = gql`
             ...FarmingFields
         }
     }
-`
+`;
 
 export const SINGLE_FARMING = gql`
     query SingleFarming($farmId: ID!) {
@@ -37,7 +37,7 @@ export const SINGLE_FARMING = gql`
             ...FarmingFields
         }
     }
-`
+`;
 
 export const ALL_POSITIONS_ON_FARMING = gql`
     query AllDepositsOnFarming($farmId: Bytes!) {
@@ -45,7 +45,7 @@ export const ALL_POSITIONS_ON_FARMING = gql`
             ...DepositFields
         }
     }
-`
+`;
 
 export const ACITVE_FARMING_FOR_POOL = gql`
     query ActiveFarmingForPool($poolId: Bytes!) {
@@ -53,4 +53,4 @@ export const ACITVE_FARMING_FOR_POOL = gql`
             ...FarmingFields
         }
     }
-`
+`;

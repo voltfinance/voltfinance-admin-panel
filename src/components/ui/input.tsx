@@ -3,8 +3,7 @@ import * as React from 'react';
 import { cn } from '@/lib/utils';
 
 const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`);
-export interface InputProps
-    extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     onUserInput?: (value: string) => void;
     maxDecimals?: number;
 }
@@ -24,19 +23,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                     if (value === '.') {
                         value = '0.';
                     }
-                    value =
-                        value.indexOf('.') >= 0
-                            ? value.slice(
-                                  0,
-                                  value.indexOf('.') + maxDecimals + 1
-                              )
-                            : value;
-                    if (
-                        value === '' ||
-                        inputRegex.test(
-                            value.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-                        )
-                    ) {
+                    value = value.indexOf('.') >= 0 ? value.slice(0, value.indexOf('.') + maxDecimals + 1) : value;
+                    if (value === '' || inputRegex.test(value.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))) {
                         onUserInput && onUserInput(value);
                     }
                 }}

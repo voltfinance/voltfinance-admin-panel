@@ -35,9 +35,7 @@ const FarmPoolDetails = ({ name, id }: IFarmPoolDetails) => {
             {token0 && token1 ? (
                 <div className="flex flex-col gap-4">
                     <div>
-                        <div className="font-semibold text-sm">
-                            Pool address
-                        </div>
+                        <div className="font-semibold text-sm">Pool address</div>
                         <DataWithCopyButton data={id} />
                     </div>
                     <div>

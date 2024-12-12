@@ -1,9 +1,4 @@
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-} from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select';
 import { Link, NavLink, matchPath, useLocation } from 'react-router-dom';
 import { useAccount, useConnect, useDisconnect } from 'wagmi';
 
@@ -26,9 +21,7 @@ const Connect = () => {
                     <Select
                         onValueChange={(v) =>
                             connect({
-                                connector: connectors.find(
-                                    (connector) => connector.name === v
-                                ),
+                                connector: connectors.find((connector) => connector.name === v),
                             })
                         }
                     >
@@ -37,18 +30,11 @@ const Connect = () => {
                         </SelectTrigger>
                         <SelectContent>
                             {connectors
-                                .filter(
-                                    (x) => x.ready && x.id !== connector?.id
-                                )
+                                .filter((x) => x.ready && x.id !== connector?.id)
                                 .map((x) => (
-                                    <SelectItem
-                                        key={`connector-${x.name}`}
-                                        value={x.name}
-                                    >
+                                    <SelectItem key={`connector-${x.name}`} value={x.name}>
                                         {x.name}
-                                        {isLoading &&
-                                            x.id === pendingConnector?.id &&
-                                            ' (connecting)'}
+                                        {isLoading && x.id === pendingConnector?.id && ' (connecting)'}
                                     </SelectItem>
                                 ))}
                         </SelectContent>
@@ -81,9 +67,7 @@ const Header = () => {
     const { pathname } = useLocation();
 
     const setNavlinkClasses = (paths: string[]) =>
-        paths.some((path) => matchPath(path, pathname))
-            ? 'text-primary-text bg-blue-400'
-            : 'hover:bg-blue-100';
+        paths.some((path) => matchPath(path, pathname)) ? 'text-primary-text bg-blue-400' : 'hover:bg-blue-100';
 
     return (
         <header className="sticky top-4 z-10 flex justify-between items-center py-3 px-8 bg-card border border-card-border rounded-3xl gap-4">

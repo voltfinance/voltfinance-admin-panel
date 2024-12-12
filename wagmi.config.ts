@@ -55,7 +55,7 @@ const contracts: ContractConfig[] = [
     {
         name: 'AlgebraVirtualPool',
         abi: algebraVirtualPoolABI,
-    }
+    },
 ];
 
 export default defineConfig({

@@ -1,36 +1,28 @@
-import { useMemo } from "react";
-import { Address, useToken } from "wagmi";
-import { Token } from "@cryptoalgebra/fuse-sdk";
-import { ExtendedNative } from "@cryptoalgebra/fuse-sdk";
-import { ADDRESS_ZERO } from "@cryptoalgebra/fuse-sdk";
-import {
-  DEFAULT_CHAIN_ID,
-  DEFAULT_NATIVE_NAME,
-  DEFAULT_NATIVE_SYMBOL,
-} from "@/constants/default-chain-id";
+import { useMemo } from 'react';
+import { Address, useToken } from 'wagmi';
+import { Token } from '@cryptoalgebra/fuse-sdk';
+import { ExtendedNative } from '@cryptoalgebra/fuse-sdk';
+import { ADDRESS_ZERO } from '@cryptoalgebra/fuse-sdk';
+import { DEFAULT_CHAIN_ID, DEFAULT_NATIVE_NAME, DEFAULT_NATIVE_SYMBOL } from '@/constants/default-chain-id';
 
 export function useAlgebraToken(address: Address | undefined) {
-  const isETH = address === ADDRESS_ZERO;
+    const isETH = address === ADDRESS_ZERO;
 
-  const { data: tokenData, isLoading } = useToken({
-    address: isETH ? undefined : address,
-    chainId: DEFAULT_CHAIN_ID,
-  });
+    const { data: tokenData, isLoading } = useToken({
+        address: isETH ? undefined : address,
+        chainId: DEFAULT_CHAIN_ID,
+    });
 
-  return useMemo(() => {
-    if (!address) return;
+    return useMemo(() => {
+        if (!address) return;
 
-    if (address === ADDRESS_ZERO)
-      return ExtendedNative.onChain(
-        DEFAULT_CHAIN_ID,
-        DEFAULT_NATIVE_SYMBOL,
-        DEFAULT_NATIVE_NAME
-      );
+        if (address === ADDRESS_ZERO)
+            return ExtendedNative.onChain(DEFAULT_CHAIN_ID, DEFAULT_NATIVE_SYMBOL, DEFAULT_NATIVE_NAME);
 
-    if (isLoading || !tokenData) return undefined;
+        if (isLoading || !tokenData) return undefined;
 
-    const { symbol, name, decimals } = tokenData;
+        const { symbol, name, decimals } = tokenData;
 
-    return new Token(DEFAULT_CHAIN_ID, address, decimals, symbol, name);
-  }, [address, tokenData, isLoading]);
+        return new Token(DEFAULT_CHAIN_ID, address, decimals, symbol, name);
+    }, [address, tokenData, isLoading]);
 }
